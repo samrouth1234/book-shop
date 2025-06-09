@@ -137,11 +137,7 @@ export default function CreateBookForm() {
               <FormItem>
                 <FormLabel>Stock</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="e.g. 100"
-                    {...field}
-                  />
+                  <Input type="number" placeholder="e.g. 100" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -184,7 +180,11 @@ export default function CreateBookForm() {
 
           {/* Submit Button */}
           <section className="md:col-span-2 flex justify-end">
-            <Button type="submit" disabled={createBookMutation.isPending}>
+            <Button
+              type="submit"
+              className="cursor-pointer"
+              disabled={createBookMutation.isPending}
+            >
               {createBookMutation.isPending ? "Creating..." : "Create Book"}
             </Button>
           </section>

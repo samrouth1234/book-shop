@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Navbar } from "@/app/(front-end)/(components)/Navbar";
+import { Navbar } from "@/app/(front-end)/(components)/main-navbar";
 
 interface BookShopLayoutProps {
   children: React.ReactNode;

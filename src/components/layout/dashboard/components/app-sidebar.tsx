@@ -1,21 +1,40 @@
+"use client";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { LayoutGrid } from "lucide-react";
+import {
+  BookOpenText,
+  ChartBarStacked,
+  ChartNoAxesCombined,
+  ChartPie,
+  LayoutDashboard,
+  BookMinus,
+} from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface NavItemProps {
   href: string;
   icon: React.ReactNode;
   children: React.ReactNode;
-  active?: boolean;
 }
 
-function NavItem({ href, icon, children, active }: NavItemProps) {
+function NavItem({ href, icon, children }: NavItemProps) {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
   return (
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-2 px-3 py-2 text-sm text-gray-700 rounded-lg",
-        active && "bg-gray-100"
+        "flex items-center gap-2 px-3 py-2 text-sm text-gray-700 rounded-lg transition-colors duration-200",
+        isActive
+          ? "bg-blue-50 text-blue-700 font-semibold"
+          : "hover:bg-gray-50 hover:text-gray-900"
       )}
     >
       {icon}
@@ -24,31 +43,48 @@ function NavItem({ href, icon, children, active }: NavItemProps) {
   );
 }
 
-function FolderItem({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
+function SidebarLink({ href, label }: { href: string; label: string }) {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
   return (
     <Link
       href={href}
-      className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+      className={cn(
+        "block px-6 py-1.5 text-sm rounded-md transition-colors",
+        isActive
+          ? "bg-blue-100 text-blue-700 font-semibold"
+          : "text-gray-700 hover:bg-gray-100"
+      )}
     >
-      <svg
-        className="w-4 h-4 text-gray-400"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-        />
-      </svg>
+      {label}
+    </Link>
+  );
+}
+
+function FolderItem({
+  href,
+  icon,
+  children,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors duration-200",
+        isActive
+          ? "bg-blue-50 text-blue-700 font-semibold"
+          : "text-gray-700 hover:bg-gray-50"
+      )}
+    >
+      {icon}
       <span>{children}</span>
     </Link>
   );
@@ -58,49 +94,16 @@ export default function AppSideBarBook() {
   return (
     <div className="w-64 border-r bg-white">
       <div className="p-4">
-        <h1 className="text-xl font-bold">Book Shop</h1>
+        <h1 className="text-xl font-bold">KHMENG CODER</h1>
       </div>
       <nav className="space-y-1 px-2">
-        <NavItem href="#" icon={<LayoutGrid className="h-4 w-4" />} active>
+        <NavItem href="/dashboard" icon={<LayoutDashboard size={20} />}>
           Dashboard
         </NavItem>
-        <NavItem
-          href="#"
-          icon={
-            <svg
-              className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <path
-                d="M15 3v18M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          }
-        >
+        <NavItem href="#" icon={<ChartPie size={20} />}>
           Presentations
         </NavItem>
-        <NavItem
-          href="#"
-          icon={
-            <svg
-              className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <path
-                d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 5h6m-3 4v6m-3-3h6"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          }
-        >
+        <NavItem href="#" icon={<ChartNoAxesCombined size={20} />}>
           Analytics
         </NavItem>
         <div className="py-3">
@@ -108,10 +111,36 @@ export default function AppSideBarBook() {
             Collections
           </div>
           <div className="mt-2">
-            <FolderItem href="#">Product Demos</FolderItem>
-            <FolderItem href="#">Case Studies</FolderItem>
-            <FolderItem href="#">Sales Collateral</FolderItem>
-            <FolderItem href="#">Training Materials</FolderItem>
+            <Accordion type="single" collapsible>
+              <AccordionItem value="item-1">
+                <AccordionTrigger className="py-2 px-3 text-gray-700 hover:bg-gray-50">
+                  {" "}
+                  <p className="flex justify-start gap-2">
+                    {" "}
+                    <BookMinus size={20} /> Book{" "}
+                  </p>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <SidebarLink href="/dashboard/books" label="List All Books" />
+                  <SidebarLink
+                    href="/dashboard/books/create"
+                    label="Create Book"
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+            <FolderItem
+              icon={<BookOpenText size={20} />}
+              href="/dashboard/authors/create"
+            >
+              Author
+            </FolderItem>
+            <FolderItem
+              icon={<ChartBarStacked size={20} />}
+              href="/dashboard/categorys/create"
+            >
+              Category
+            </FolderItem>
           </div>
         </div>
       </nav>
