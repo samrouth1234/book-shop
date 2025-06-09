@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1749114921763,
+      "tag": "20250605091521_colossal_tomorrow_man",
+      "breakpoints": true
+    }
+  ]
+}
