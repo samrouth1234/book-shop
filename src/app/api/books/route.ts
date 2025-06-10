@@ -22,11 +22,14 @@ export const POST = apiHandler(async (req: NextRequest) => {
 
   if (!parse.success) {
     return NextResponse.json(
-      { error: parse.error },
+      { error: parse.error.message },
       { status: HttpStatus.BAD_REQUEST }
     );
   }
 
   const book = await bookService.create(parse.data);
-  return NextResponse.json({ success: true, data: book });
+  return NextResponse.json({
+    success: true,
+    data: book,
+  });
 });

@@ -32,16 +32,16 @@ export const PUT = apiHandler(
   async (req: NextRequest, { params }: BookIdProps) => {
     const id = Number(params.id);
     const json = await req.json();
-    const updateData = newBookSchema.partial().safeParse(json);
+    const updateBookData = newBookSchema.partial().safeParse(json);
 
-    if (!updateData.success) {
+    if (!updateBookData.success) {
       return NextResponse.json(
         { message: "Invalid data :", error },
         { status: HttpStatus.BAD_REQUEST }
       );
     }
 
-    const updated = await bookService.update(id, updateData.data);
+    const updated = await bookService.update(id, updateBookData.data);
     return NextResponse.json(updated);
   }
 );

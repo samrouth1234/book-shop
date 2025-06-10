@@ -121,7 +121,10 @@ export default function AppSideBarBook() {
                   </p>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <SidebarListItem href="/dashboard/books" label="List All Books" />
+                  <SidebarListItem
+                    href="/dashboard/books"
+                    label="List All Books"
+                  />
                   <SidebarListItem
                     href="/dashboard/books/create"
                     label="Create Book"

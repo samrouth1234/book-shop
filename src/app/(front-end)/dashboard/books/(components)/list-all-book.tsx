@@ -15,6 +15,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import DeletedBookMoadal from "./deleted-book-modal";
 import EditBookModal from "./edit-book-modal";
+import loading from "@/../../public/loading-animation.svg";
+import Image from "next/image";
 
 interface BookType {
   bookId: number;
@@ -139,7 +141,17 @@ const ListAllBooks = () => {
   });
 
   if (isLoading) {
-    return <p className="text-center text-red-400">Loading ...</p>;
+    return (
+      <p className="flex justify-center m-auto">
+        <Image
+          src={loading}
+          width={100}
+          height={100}
+          unoptimized={true}
+          alt="loading-not-found"
+        />
+      </p>
+    );
   }
 
   if (isError) {

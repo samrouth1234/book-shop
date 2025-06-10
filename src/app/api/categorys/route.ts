@@ -1,25 +1,24 @@
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
-import { newAuthorSchema } from "@/db/shema";
+import { newCategorySchema } from "@/db/shema";
 import { apiHandler } from "@/error";
-import { AuthorService } from "@/features/authors";
+import { CategoryService } from "@/features/categorys";
 import { NextRequest, NextResponse } from "next/server";
 
-const authorService = new AuthorService(db);
+const categorySerive = new CategoryService(db);
 
 export const GET = apiHandler(async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
 
-  const authors = await authorService.getAll(page, limit);
-  console.log(authors)
-  return NextResponse.json(authors);
+  const categorys = await categorySerive.getAll(page, limit);
+  return NextResponse.json(categorys);
 });
 
 export const POST = apiHandler(async (req: NextRequest) => {
   const json = await req.json();
-  const parse = newAuthorSchema.safeParse(json);
+  const parse = newCategorySchema.safeParse(json);
 
   if (!parse.success) {
     return NextResponse.json(
@@ -28,9 +27,9 @@ export const POST = apiHandler(async (req: NextRequest) => {
     );
   }
 
-  const author = await authorService.create(parse.data);
+  const category = await categorySerive.create(parse.data);
   return NextResponse.json({
     success: true,
-    data: author,
+    data: category,
   });
 });

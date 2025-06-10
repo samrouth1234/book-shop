@@ -17,7 +17,7 @@ export class CategoryRepository {
 
   // Find all category
   async findAll({ limit, offset }: { limit: number; offset: number }) {
-    const [categorys] = await this.db
+    const categorys = await this.db
       .select()
       .from(categoriesTable)
       .limit(limit)

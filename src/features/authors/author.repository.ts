@@ -7,17 +7,14 @@ export class AuthorRepository {
 
   // Create author
   async create(data: newAuthor) {
-    const [author] = await this.db
-      .insert(authorTable)
-      .values(data)
-      .returning();
+    const [author] = await this.db.insert(authorTable).values(data).returning();
 
     return author;
   }
 
   // Find all author
   async findAll({ limit, offset }: { limit: number; offset: number }) {
-    const [authors] = await this.db
+    const authors = await this.db
       .select()
       .from(authorTable)
       .limit(limit)
@@ -57,7 +54,7 @@ export class AuthorRepository {
       .delete(authorTable)
       .where(eq(authorTable.id, bookId))
       .returning();
-    
+
     return deletedAuthor;
   }
 }

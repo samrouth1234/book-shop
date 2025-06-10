@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Bell, Grid, Search } from "lucide-react";
 
 import Image from "next/image";
-import Logo from "../../../../../public/images/404.png"
+import Logo from "@/../../public/images/cat-cute.jpg";
 
 export default function AppSideBarHeader() {
   return (
@@ -15,12 +15,12 @@ export default function AppSideBarHeader() {
         </div>
       </div>
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon">
-          <Grid className="h-4 w-4" />
-        </Button>
-        <Button variant="ghost" size="icon">
-          <Bell className="h-4 w-4" />
-        </Button>
+        <div>
+          <Grid size={20} />
+        </div>
+        <div>
+          <Bell size={20} />
+        </div>
         <div className="h-8 w-8 overflow-hidden rounded-full">
           <Image
             src={Logo}
@@ -32,5 +32,5 @@ export default function AppSideBarHeader() {
         </div>
       </div>
     </header>
-  )
+  );
 }
