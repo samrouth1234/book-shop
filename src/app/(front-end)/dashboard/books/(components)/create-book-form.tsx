@@ -45,7 +45,7 @@ export default function CreateBookForm() {
       if (data.success) {
         form.reset();
         toast.success("Book created successfully");
-        router.push("/");
+        router.push("/dashboard/books");
       } else {
         toast.error(data.error || "Failed to create book");
       }

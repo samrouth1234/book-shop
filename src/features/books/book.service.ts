@@ -13,8 +13,9 @@ export class BookService {
     return this.bookRepository.create(data);
   }
 
-  async getAll() {
-    return this.bookRepository.findAll();
+  async getAll(page: number = 1, limit: number = 10) {
+    const offset = (page - 1) * limit;
+    return this.bookRepository.findAll({ limit, offset });
   }
 
   async getById(bookId: number) {

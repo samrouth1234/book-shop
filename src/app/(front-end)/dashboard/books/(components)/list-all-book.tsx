@@ -1,3 +1,5 @@
+"use client";
+
 import { PaginationWithLinks } from "@/app/(front-end)/(components)/pagination-link";
 import {
   Table,
@@ -7,109 +9,220 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import DeletedBookMoadal from "./deleted-book-modal";
+import EditBookModal from "./edit-book-modal";
 
-const teachingReportings = [
-  {
-    teachingDate: "12/02/2025",
-    submitDate: "23/04/2034",
-    time: "7 AM",
-    subject: "Java Programming",
-    numberOfStudents: 34,
-    status: "Active",
-  },
-  {
-    teachingDate: "13/02/2025",
-    submitDate: "24/04/2034",
-    time: "9 AM",
-    subject: "Web Development",
-    numberOfStudents: 28,
-    status: "Pending",
-  },
-  {
-    teachingDate: "14/02/2025",
-    submitDate: "25/04/2034",
-    time: "5 PM",
-    subject: "Database Systems",
-    numberOfStudents: 30,
-    status: "Active",
-  },
-  {
-    teachingDate: "15/02/2025",
-    submitDate: "25/04/2034",
-    time: "6 PM",
-    subject: "Information Systems",
-    numberOfStudents: 30,
-    status: "Completed",
-  },
-  {
-    teachingDate: "16/02/2025",
-    submitDate: "25/04/2034",
-    time: "8 PM",
-    subject: "Data structures",
-    numberOfStudents: 30,
-    status: "Pending",
-  },
-  {
-    teachingDate: "17/02/2025",
-    submitDate: "25/04/2034",
-    time: "12 PM",
-    subject: "Network Engineer",
-    numberOfStudents: 30,
-    status: "Completed",
-  },
-  {
-    teachingDate: "18/02/2025",
-    submitDate: "25/04/2034",
-    time: "10 PM",
-    subject: "C# Programming",
-    numberOfStudents: 30,
-    status: "Pending",
-  }
-];
+interface BookType {
+  bookId: number;
+  title: string;
+  description: string;
+  price: string;
+  stock: number;
+  categoryName: string;
+  authorName: string;
+}
+
+interface BookResponse {
+  books: BookType[];
+  totalBooks: number;
+}
+
+const fetchBooks = async (
+  page: number,
+  limit: number
+): Promise<BookResponse> => {
+  const response = await fetch(`/api/books?page=${page}&limit=${limit}`);
+  if (!response.ok) throw new Error("Failed to fetch books");
+  return response.json();
+};
 
 const ListAllBooks = () => {
-  const page = Number.parseInt("1");
-  const pageSize = Number.parseInt("2");
-  const totalItems = Number.parseInt("20");
+  const searchParam = useSearchParams();
+  const queryClient = useQueryClient();
+  // edit book state
+  const [isOpenModalEditBook, setOpenModalEditBook] = useState<boolean>(false);
+  const [editinBook, setEditinBook] = useState<BookType | null>(null);
+  // deletd book state
+  const [isOpenModalDeletedBook, setOpenModalDeletedBook] =
+    useState<boolean>(false);
+  const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
+  // pagination
+  const page = Number.parseInt(searchParam.get("page") || "1");
+  const limit = Number.parseInt(searchParam.get("limit") || "10");
+
+  // show modal for deleted book
+  const openModal = (bookId: number) => {
+    setSelectedBookId(bookId);
+    setOpenModalDeletedBook(true);
+  };
+
+  // close modal for deleted book
+  const closeModal = () => {
+    setOpenModalDeletedBook(false);
+    setSelectedBookId(null);
+  };
+
+  // show modal edit book
+  const openEditModal = (book: BookType) => {
+    setEditinBook(book);
+    setOpenModalEditBook(true);
+  };
+
+  // close modal edit book
+  const closeEditModal = () => {
+    setOpenModalEditBook(false);
+    setEditinBook(null);
+  };
+
+  // function for call deleted book
+  const handleConfirmDelete = () => {
+    if (selectedBookId !== null) {
+      deleteBookMutation.mutate(selectedBookId);
+    }
+    closeModal();
+  };
+  // function for call edit book
+  const handleEditBook = (updatedBook: BookType) => {
+    editBookMutation.mutate(updatedBook);
+  };
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["books", page, limit],
+    queryFn: () => fetchBooks(page, limit),
+  });
+
+  const editBookMutation = useMutation({
+    mutationFn: async (updatedBook: BookType) => {
+      const response = await fetch(`/api/books/${updatedBook.bookId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...updatedBook,
+          // Convert Types Before Sending the Payload
+          stock: Number(updatedBook.stock),
+        }),
+      });
+      console.log(JSON.stringify(updatedBook));
+      if (!response.ok) throw new Error("Failed to update book");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      toast.success("Book updated successfully!");
+      closeEditModal();
+    },
+    onError: () => {
+      toast.error("Failed to update the book");
+    },
+  });
+
+  // mutation deleted book
+  const deleteBookMutation = useMutation({
+    mutationFn: async (bookId: number) => {
+      const response = await fetch(`/api/books/${bookId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Failed to deteled book");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      toast.success("Book deleted successfully!");
+    },
+    onError: () => {
+      toast.error("Failed to deleted the book");
+    },
+  });
+
+  if (isLoading) {
+    return <p className="text-center text-red-400">Loading ...</p>;
+  }
+
+  if (isError) {
+    return (
+      <p className="text-red-500">
+        Failed to load books. Please try again later.
+      </p>
+    );
+  }
+
+  if (!data || !data.books || data.books.length === 0) {
+    return <p>No books found for the current selection.</p>;
+  }
 
   return (
-    <section>
+    <div>
       <Table>
         <TableHeader className="bg-gray-50">
           <TableRow>
-            <TableHead className="border-r-1 p-4">Teaching Date</TableHead>
-            <TableHead className="border-r-1">Submit Date</TableHead>
-            <TableHead className="border-r-1">Time</TableHead>
-            <TableHead className="border-r-1">Subject</TableHead>
-            <TableHead className="w-20 border-r-1">
-              Number of Students
-            </TableHead>
-            <TableHead>Status</TableHead>
+            <TableHead className="border-r-1 p-4 w-20">Book ID</TableHead>
+            <TableHead className="border-r-1">Title</TableHead>
+            <TableHead className="border-r-1">Description</TableHead>
+            <TableHead className="border-r-1 w-20">Price</TableHead>
+            <TableHead className="w-20 border-r-1">Stock</TableHead>
+            <TableHead className="border-r-1">Category Name</TableHead>
+            <TableHead className="border-r-1">Author Name</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {teachingReportings.map((report, index) => (
+          {data?.books.map((book, index) => (
             <TableRow key={index}>
-              <TableCell className="p-4">{report.teachingDate}</TableCell>
-              <TableCell>{report.submitDate}</TableCell>
-              <TableCell>{report.time}</TableCell>
-              <TableCell>{report.subject}</TableCell>
-              <TableCell>{report.numberOfStudents}</TableCell>
+              <TableCell className="p-4">{book.bookId}</TableCell>
+              <TableCell>{book.title}</TableCell>
+              <TableCell>{book.description}</TableCell>
+              <TableCell>$ {book.price}</TableCell>
+              <TableCell>{book.stock}</TableCell>
+              <TableCell>{book.categoryName}</TableCell>
+              <TableCell>{book.authorName}</TableCell>
+              <TableCell>
+                <button
+                  className="cursor-pointer pe-3 text-indigo-500 hover:underline hover:text-indigo-400"
+                  type="button"
+                  onClick={() => openEditModal(book)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="cursor-pointer text-red-500 hover:underline hover:text-red-400"
+                  type="button"
+                  onClick={() => openModal(book.bookId)}
+                >
+                  Delete
+                </button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      {/* Pagination */}
+      {/* pagination */}
       <section className="flex justify-end">
         <div className="cursor-pointer">
           <PaginationWithLinks
             page={page}
-            pageSize={pageSize}
-            totalCount={totalItems}
+            pageSize={limit}
+            totalCount={data?.totalBooks}
           />
         </div>
       </section>
-    </section>
+      {/* deleted moadal */}
+      <DeletedBookMoadal
+        isOpen={isOpenModalDeletedBook}
+        onClose={closeModal}
+        onConfirm={handleConfirmDelete}
+      />
+      {/* edit moadal */}
+      <EditBookModal
+        isOpen={isOpenModalEditBook}
+        onClose={closeEditModal}
+        onSubmit={handleEditBook}
+        editBook={editinBook}
+      />
+    </div>
   );
 };
 

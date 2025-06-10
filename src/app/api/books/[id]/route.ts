@@ -1,8 +1,8 @@
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newBookSchema } from "@/db/shema";
-import { BadRequestException } from "@/error";
 import { BookService } from "@/features/books";
+import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
 const bookService = new BookService(db);
@@ -31,7 +31,10 @@ export async function PUT(req: NextRequest, { params }: BookIdProps) {
   const updateData = newBookSchema.partial().safeParse(json);
 
   if (!updateData.success) {
-    return NextResponse.json(BadRequestException);
+    return NextResponse.json(
+      { message: "Invalid data :", error },
+      { status: HttpStatus.BAD_REQUEST }
+    );
   }
 
   const updated = await bookService.update(id, updateData.data);

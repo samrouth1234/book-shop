@@ -43,7 +43,7 @@ function NavItem({ href, icon, children }: NavItemProps) {
   );
 }
 
-function SidebarLink({ href, label }: { href: string; label: string }) {
+function SidebarListItem({ href, label }: { href: string; label: string }) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
@@ -51,7 +51,7 @@ function SidebarLink({ href, label }: { href: string; label: string }) {
     <Link
       href={href}
       className={cn(
-        "block px-6 py-1.5 text-sm rounded-md transition-colors",
+        "block px-6 py-1.5 mb-1 text-sm rounded-md transition-colors",
         isActive
           ? "bg-blue-100 text-blue-700 font-semibold"
           : "text-gray-700 hover:bg-gray-100"
@@ -121,8 +121,8 @@ export default function AppSideBarBook() {
                   </p>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <SidebarLink href="/dashboard/books" label="List All Books" />
-                  <SidebarLink
+                  <SidebarListItem href="/dashboard/books" label="List All Books" />
+                  <SidebarListItem
                     href="/dashboard/books/create"
                     label="Create Book"
                   />

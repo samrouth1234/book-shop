@@ -6,8 +6,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 const bookService = new BookService(db);
 
-export async function GET() {
-  const books = await bookService.getAll();
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "10");
+
+  const books = await bookService.getAll(page, limit);
   return NextResponse.json(books);
 }
 
