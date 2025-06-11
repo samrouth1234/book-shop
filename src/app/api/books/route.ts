@@ -17,19 +17,36 @@ export const GET = apiHandler(async (req: Request) => {
 });
 
 export const POST = apiHandler(async (req: NextRequest) => {
-  const json = await req.json();
-  const parse = newBookSchema.safeParse(json);
-
-  if (!parse.success) {
+  try {
+    const json = await req.json();
+    const result = newBookSchema.safeParse(json);
+    if (!result.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Validation failed",
+          errors: result.error.flatten().fieldErrors,
+        },
+        { status: HttpStatus.BAD_REQUEST }
+      );
+    }
+    const book = await bookService.create(result.data);
     return NextResponse.json(
-      { error: parse.error.message },
-      { status: HttpStatus.BAD_REQUEST }
+      {
+        success: true,
+        message: "Book created successfully",
+        data: book,
+      },
+      { status: HttpStatus.CREATED }
+    );
+  } catch (err) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Internal server error",
+        error: err instanceof Error ? err.message : "Unexpected error",
+      },
+      { status: HttpStatus.INTERNAL_SERVER_ERROR }
     );
   }
-
-  const book = await bookService.create(parse.data);
-  return NextResponse.json({
-    success: true,
-    data: book,
-  });
 });

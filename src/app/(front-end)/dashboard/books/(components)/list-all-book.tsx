@@ -47,7 +47,7 @@ const ListAllBooks = () => {
   const queryClient = useQueryClient();
   // edit book state
   const [isOpenModalEditBook, setOpenModalEditBook] = useState<boolean>(false);
-  const [editinBook, setEditinBook] = useState<BookType | null>(null);
+  const [editBook, setEditBook] = useState<BookType | null>(null);
   // deletd book state
   const [isOpenModalDeletedBook, setOpenModalDeletedBook] =
     useState<boolean>(false);
@@ -70,23 +70,24 @@ const ListAllBooks = () => {
 
   // show modal edit book
   const openEditModal = (book: BookType) => {
-    setEditinBook(book);
+    setEditBook(book);
     setOpenModalEditBook(true);
   };
 
   // close modal edit book
   const closeEditModal = () => {
     setOpenModalEditBook(false);
-    setEditinBook(null);
+    setEditBook(null);
   };
 
   // function for call deleted book
-  const handleConfirmDelete = () => {
+  const handleDeleteBook = () => {
     if (selectedBookId !== null) {
       deleteBookMutation.mutate(selectedBookId);
     }
     closeModal();
   };
+  
   // function for call edit book
   const handleEditBook = (updatedBook: BookType) => {
     editBookMutation.mutate(updatedBook);
@@ -154,20 +155,16 @@ const ListAllBooks = () => {
     );
   }
 
-  if (isError) {
+  if (isError || !data) {
     return (
-      <p className="text-red-500">
+      <p className="text-red-500 text-center">
         Failed to load books. Please try again later.
       </p>
     );
   }
 
-  if (!data || !data.books || data.books.length === 0) {
-    return <p>No books found for the current selection.</p>;
-  }
-
   return (
-    <div>
+    <section>
       <Table>
         <TableHeader className="bg-gray-50">
           <TableRow>
@@ -225,16 +222,16 @@ const ListAllBooks = () => {
       <DeletedBookMoadal
         isOpen={isOpenModalDeletedBook}
         onClose={closeModal}
-        onConfirm={handleConfirmDelete}
+        onConfirm={handleDeleteBook}
       />
       {/* edit moadal */}
       <EditBookModal
         isOpen={isOpenModalEditBook}
         onClose={closeEditModal}
         onSubmit={handleEditBook}
-        editBook={editinBook}
+        editBook={editBook}
       />
-    </div>
+    </section>
   );
 };
 

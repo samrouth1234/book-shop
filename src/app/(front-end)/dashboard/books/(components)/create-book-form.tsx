@@ -178,7 +178,7 @@ export default function CreateBookForm() {
             )}
           />
 
-          {/* Submit Button */}
+          {/* create book */}
           <section className="md:col-span-2 flex justify-end">
             <Button
               type="submit"

@@ -17,8 +17,14 @@ export const bookTable = pgTable("books", {
   description: text("description"),
   price: numeric("price", { precision: 10, scale: 2 }).notNull(),
   stock: integer("stock").notNull(),
-  categoryId: integer("category_id").references(() => categoriesTable.id),
-  authorId: integer("author_id").references(() => authorTable.id),
+  categoryId: integer("category_id").references(() => categoriesTable.id, {
+    onDelete: "cascade",
+    onUpdate: "cascade",
+  }),
+  authorId: integer("author_id").references(() => authorTable.id, {
+    onDelete: "cascade",
+    onUpdate: "cascade",
+  }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

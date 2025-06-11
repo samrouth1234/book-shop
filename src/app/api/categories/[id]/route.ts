@@ -1,9 +1,8 @@
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
-import { newBookSchema, newCategorySchema } from "@/db/shema";
+import { newCategorySchema } from "@/db/shema";
 import { apiHandler } from "@/error";
-import { CategoryService } from "@/features/categorys";
-import Error from "next/error";
+import { CategoryService } from "@/features/categories";
 import { NextRequest, NextResponse } from "next/server";
 
 const categorySerive = new CategoryService(db);
@@ -21,7 +20,7 @@ export const GET = apiHandler(
 
     if (!category)
       return NextResponse.json(
-        { error: "Category Not found" },
+        { message: `Category with ID ${id} not found.` },
         { status: HttpStatus.NOT_FOUND }
       );
     return NextResponse.json(category);
@@ -36,8 +35,11 @@ export const PUT = apiHandler(
 
     if (!updateCategoryData.success) {
       return NextResponse.json(
-        { message: "Invalid data :", Error },
-        { status: HttpStatus.BAD_REQUEST }
+        {
+          message: "Invalid data for category update.",
+          errors: updateCategoryData.error.flatten().fieldErrors,
+        },
+        { status: HttpStatus.UNPROCESSABLE_ENTITY }
       );
     }
 

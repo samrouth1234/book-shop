@@ -21,7 +21,7 @@ export const GET = apiHandler(
 
     if (!book)
       return NextResponse.json(
-        { error: "Book Not found" },
+        { message: `Book with ID ${id} not found.` },
         { status: HttpStatus.NOT_FOUND }
       );
     return NextResponse.json(book);
@@ -36,8 +36,11 @@ export const PUT = apiHandler(
 
     if (!updateBookData.success) {
       return NextResponse.json(
-        { message: "Invalid data :", error },
-        { status: HttpStatus.BAD_REQUEST }
+        {
+          message: "Invalid data for book update.",
+          errors: updateBookData.error.flatten().fieldErrors,
+        },
+        { status: HttpStatus.UNPROCESSABLE_ENTITY }
       );
     }
 

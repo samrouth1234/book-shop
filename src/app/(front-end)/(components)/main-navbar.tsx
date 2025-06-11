@@ -1,4 +1,4 @@
-import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import {
   Accordion,
@@ -54,7 +54,7 @@ interface NavbarProps {
 const Navbar = ({
   logo = {
     url: "/",
-    src: "https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg",
+    src: "/images/cat-cute.jpg",
     alt: "logo",
     title: "KhmengCoder",
   },

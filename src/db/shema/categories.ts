@@ -9,7 +9,6 @@ export const categoriesTable = pgTable("categories", {
 // 😒 Define a Zod schema for a new author
 export const newCategorySchema = z.object({
   name: z.string(),
-  bio: z.string().optional(),
 });
 
 export type newCategory = z.infer<typeof newCategorySchema>;

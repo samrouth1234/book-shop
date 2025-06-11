@@ -9,7 +9,7 @@ export class CategoryService {
   constructor(private readonly dbInstance: DbType) {
     this.categoryRepository = new CategoryRepository(this.dbInstance);
   }
-
+  
   // Create Category
   async create(data: newCategory) {
     return this.categoryRepository.create(data);

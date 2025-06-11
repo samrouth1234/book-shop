@@ -1,25 +1,33 @@
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
-import { newAuthorSchema } from "@/db/shema";
+import { newCategorySchema } from "@/db/shema";
 import { apiHandler } from "@/error";
-import { AuthorService } from "@/features/authors";
+import { CategoryService } from "@/features/categories";
 import { NextRequest, NextResponse } from "next/server";
 
-const authorService = new AuthorService(db);
+const categorySerive = new CategoryService(db);
 
 export const GET = apiHandler(async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
 
-  const authors = await authorService.getAll(page, limit);
-  return NextResponse.json(authors);
+  const { categorys, totalCategorys } = await categorySerive.getAll(
+    page,
+    limit
+  );
+
+  return NextResponse.json({
+    categories: categorys,
+    totalCategories: totalCategorys,
+  });
 });
 
 export const POST = apiHandler(async (req: NextRequest) => {
   try {
     const json = await req.json();
-    const result = newAuthorSchema.safeParse(json);
+    const result = newCategorySchema.safeParse(json);
+
     if (!result.success) {
       return NextResponse.json(
         {
@@ -31,12 +39,12 @@ export const POST = apiHandler(async (req: NextRequest) => {
       );
     }
 
-    const author = await authorService.create(result.data);
+    const category = await categorySerive.create(result.data);
     return NextResponse.json(
       {
         success: true,
-        message: "Author created successfully",
-        data: author,
+        message: "Categories created successfully",
+        data: category,
       },
       { status: HttpStatus.CREATED }
     );

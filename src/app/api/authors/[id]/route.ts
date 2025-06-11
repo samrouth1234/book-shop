@@ -21,7 +21,7 @@ export const GET = apiHandler(
 
     if (!author)
       return NextResponse.json(
-        { error: "Author Not found" },
+        { message: `Author with ID ${id} not found.` },
         { status: HttpStatus.NOT_FOUND }
       );
 
@@ -37,8 +37,11 @@ export const PUT = apiHandler(
 
     if (!updateAuthorData.success) {
       return NextResponse.json(
-        { message: "Invalid data :", error },
-        { status: HttpStatus.BAD_REQUEST }
+        {
+          message: "Invalid data for author update.",
+          errors: updateAuthorData.error.flatten().fieldErrors,
+        },
+        { status: HttpStatus.UNPROCESSABLE_ENTITY }
       );
     }
 
