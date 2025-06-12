@@ -6,8 +6,6 @@ import { newBookSchema } from "@/db/shema";
 import { apiHandler } from "@/error";
 import { BookService } from "@/features/books";
 
-import { error } from "console";
-
 const bookService = new BookService(db);
 
 interface BookIdProps {

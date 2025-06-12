@@ -1,8 +1,6 @@
 import { DbType } from "@/db";
 import { newCategory } from "@/db/shema";
 
-import { ne } from "drizzle-orm";
-
 import { CategoryRepository } from "./category.repository";
 
 export class CategoryService {

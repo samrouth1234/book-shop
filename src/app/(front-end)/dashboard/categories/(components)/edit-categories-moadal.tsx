@@ -21,7 +21,7 @@ interface CategoriesType {
 interface EditCategoriesModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (book: any) => void;
+  onSubmit: (book: CategoriesType) => void;
   editCategories: CategoriesType | null;
 }
 

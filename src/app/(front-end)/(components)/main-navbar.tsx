@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/sheet";
 
 import { Menu } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface MenuItem {
   title: string;
@@ -76,19 +78,6 @@ const Navbar = ({
       //     icon: <Trees className="size-5 shrink-0" />,
       //     url: "#",
       //   },
-      //   {
-      //     title: "Careers",
-      //     description: "Browse job listing and discover our workspace",
-      //     icon: <Sunset className="size-5 shrink-0" />,
-      //     url: "#",
-      //   },
-      //   {
-      //     title: "Support",
-      //     description:
-      //       "Get in touch with our support team or visit our community forums",
-      //     icon: <Zap className="size-5 shrink-0" />,
-      //     url: "#",
-      //   },
       // ],
     },
     {
@@ -115,12 +104,12 @@ const Navbar = ({
         {/* Desktop Menu */}
         <nav className="hidden justify-between lg:flex">
           {/* Logo */}
-          <a href={logo.url} className="flex items-center gap-2">
-            <img src={logo.src} className="max-h-8" alt={logo.alt} />
+          <Link href={logo.url} className="flex items-center gap-2">
+            <Image src={logo.src} width={20} height={20} alt={logo.alt} />
             <span className="text-lg font-semibold tracking-tighter">
               {logo.title}
             </span>
-          </a>
+          </Link>
           <section className="m-auto flex items-center justify-center gap-5">
             <NavigationMenu>
               <NavigationMenuList>
@@ -142,9 +131,9 @@ const Navbar = ({
         <section className="block lg:hidden">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
-              <img src={logo.src} className="max-h-8" alt={logo.alt} />
-            </a>
+            <Link href={logo.url} className="flex items-center gap-2">
+              <Image src={logo.src} width={20} height={20} alt={logo.alt} />
+            </Link>
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon">
@@ -154,9 +143,9 @@ const Navbar = ({
               <SheetContent className="overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle>
-                    <a href={logo.url} className="flex items-center gap-2">
-                      <img src={logo.src} className="max-h-8" alt={logo.alt} />
-                    </a>
+                    <Link href={logo.url} className="flex items-center gap-2">
+                      <Image src={logo.src} width={20} height={20} alt={logo.alt} />
+                    </Link>
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-6 p-4">
@@ -170,10 +159,10 @@ const Navbar = ({
 
                   <div className="flex flex-col gap-3">
                     <Button asChild variant="outline">
-                      <a href={auth.login.url}>{auth.login.title}</a>
+                      <Link href={auth.login.url}>{auth.login.title}</Link>
                     </Button>
                     <Button asChild>
-                      <a href={auth.signup.url}>{auth.signup.title}</a>
+                      <Link href={auth.signup.url}>{auth.signup.title}</Link>
                     </Button>
                   </div>
                 </div>
@@ -231,15 +220,15 @@ const renderMobileMenuItem = (item: MenuItem) => {
   }
 
   return (
-    <a key={item.title} href={item.url} className="text-md font-semibold">
+    <Link key={item.title} href={item.url} className="text-md font-semibold">
       {item.title}
-    </a>
+    </Link>
   );
 };
 
 const SubMenuLink = ({ item }: { item: MenuItem }) => {
   return (
-    <a
+    <Link
       className="hover:bg-muted hover:text-accent-foreground flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
       href={item.url}
     >
@@ -252,7 +241,7 @@ const SubMenuLink = ({ item }: { item: MenuItem }) => {
           </p>
         )}
       </section>
-    </a>
+    </Link>
   );
 };
 

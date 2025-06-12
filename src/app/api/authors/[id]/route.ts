@@ -5,9 +5,6 @@ import { db } from "@/db";
 import { newAuthorSchema } from "@/db/shema";
 import { apiHandler } from "@/error";
 import { AuthorService } from "@/features/authors";
-
-import { error } from "console";
-
 interface AuthorProps {
   params: {
     id: string;

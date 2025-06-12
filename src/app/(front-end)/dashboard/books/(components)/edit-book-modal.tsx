@@ -26,7 +26,7 @@ interface BookType {
 interface EditBookModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (book: any) => void;
+  onSubmit: (book: BookType) => void;
   editBook: BookType | null;
 }
 

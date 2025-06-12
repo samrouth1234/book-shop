@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import Logo from "@/../../public/images/cat-cute.jpg";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { Bell, Grid, Search } from "lucide-react";

@@ -18,22 +18,6 @@ import {
 import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-const chartData = [
-  { month: "January", totalBooks: 186 },
-  { month: "February", totalBooks: 500 },
-  { month: "March", totalBooks: 237 },
-  { month: "April", totalBooks: 73 },
-  { month: "May", totalBooks: 209 },
-  { month: "June", totalBooks: 214 },
-];
-
-// const chartConfig = {
-//   totalBooks: {
-//     label: "Total Book",
-//     color: "var(--chart-2)",
-//   },
-// } satisfies ChartConfig;
-
 type ChartData = {
   month: string;
   totalBooks: number;

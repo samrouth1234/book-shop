@@ -17,8 +17,12 @@ const geistMono = Geist_Mono({
 
 type Params = Promise<{ locale: string }>;
 
-export async function generateMetadata({ params }: { params: Params }) {
-  const { locale } = await params;
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
+  const { locale: _locale } = await params;
   return {
     title: "Book Shop",
     description: "This website for read book online.",

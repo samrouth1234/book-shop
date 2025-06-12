@@ -22,7 +22,7 @@ interface AuthorType {
 interface EditAuthorModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (book: any) => void;
+  onSubmit: (book: AuthorType) => void;
   editAuthor: AuthorType | null;
 }
 
