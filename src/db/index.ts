@@ -26,7 +26,7 @@ const pool = new Pool({
 pool.on("error", (err: Error) => {
   console.error("Unexpected error on idle client", err);
   process.exit(-1);
-}); 
+});
 
 export type DbType = NodePgDatabase<typeof schema>;
 

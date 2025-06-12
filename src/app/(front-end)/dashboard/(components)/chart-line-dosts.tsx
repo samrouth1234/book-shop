@@ -15,13 +15,7 @@ import {
 } from "@/components/ui/chart";
 
 import { TrendingUp } from "lucide-react";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 type ChartDataItem = {
   month: string;

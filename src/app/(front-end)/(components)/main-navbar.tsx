@@ -1,3 +1,6 @@
+import Image from "next/image";
+import Link from "next/link";
+
 import {
   Accordion,
   AccordionContent,
@@ -22,8 +25,6 @@ import {
 } from "@/components/ui/sheet";
 
 import { Menu } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 
 interface MenuItem {
   title: string;
@@ -144,7 +145,12 @@ const Navbar = ({
                 <SheetHeader>
                   <SheetTitle>
                     <Link href={logo.url} className="flex items-center gap-2">
-                      <Image src={logo.src} width={20} height={20} alt={logo.alt} />
+                      <Image
+                        src={logo.src}
+                        width={20}
+                        height={20}
+                        alt={logo.alt}
+                      />
                     </Link>
                   </SheetTitle>
                 </SheetHeader>
