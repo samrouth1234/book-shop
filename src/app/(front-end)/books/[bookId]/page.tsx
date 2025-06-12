@@ -5,16 +5,16 @@ import { db } from "@/db";
 import { BookService } from "@/features/books";
 
 interface ViewBookDetailProps {
-  params: {
-    bookId: number;
-  };
+  params: Promise<{
+    bookId: string;
+  }>;
 }
 
 const bookService = new BookService(db);
 
 export default async function ViewBookDetails({ params }: ViewBookDetailProps) {
-  const { bookId } = await params;
-  console.log("Book ID", bookId);
+  const { bookId: bookIdParam } = await params;
+  const bookId = Number(bookIdParam);
 
   if (!bookId) {
     return (
@@ -25,7 +25,6 @@ export default async function ViewBookDetails({ params }: ViewBookDetailProps) {
   }
 
   const book = await bookService.getById(bookId);
-  console.log(book);
 
   if (!book) {
     return (

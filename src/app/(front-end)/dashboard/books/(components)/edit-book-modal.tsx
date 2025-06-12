@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface BookType {
+  bookId: number;
   title: string;
   description: string;
   price: string;
@@ -37,6 +38,7 @@ const EditBookModal: React.FC<EditBookModalProps> = ({
   editBook,
 }) => {
   const [book, setBook] = useState<BookType>({
+    bookId: 0,
     title: "",
     description: "",
     price: "",

@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface AuthorType {
+  id: number;
   name: string;
   bio: string;
 }
@@ -33,6 +34,7 @@ const EditAuthorModal: React.FC<EditAuthorModalProps> = ({
   editAuthor,
 }) => {
   const [auhtor, setAuthor] = useState<AuthorType>({
+    id: 0,
     name: "",
     bio: "",
   });

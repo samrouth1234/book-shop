@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface CategoriesType {
+  id: number;
   name: string;
 }
 
@@ -32,6 +33,7 @@ const EditCategoriesModal: React.FC<EditCategoriesModalProps> = ({
   editCategories,
 }) => {
   const [categories, setCategories] = useState<CategoriesType>({
+    id: 0,
     name: "",
   });
 
