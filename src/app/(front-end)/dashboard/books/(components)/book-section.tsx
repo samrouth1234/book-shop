@@ -3,7 +3,7 @@ import ListAllBooks from "./list-all-book";
 const BookSection = () => {
   return (
     <section>
-      <h1 className="text-lg font-semibold py-2">List all books</h1>
+      <h1 className="py-2 text-lg font-semibold">List all books</h1>
       <ListAllBooks />
     </section>
   );

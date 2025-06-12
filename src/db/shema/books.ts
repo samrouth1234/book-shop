@@ -6,10 +6,10 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
-
-import { categoriesTable } from "./categories";
-import { authorTable } from "./authors";
 import { z } from "zod";
+
+import { authorTable } from "./authors";
+import { categoriesTable } from "./categories";
 
 export const bookTable = pgTable("books", {
   bookId: serial("bookId").primaryKey(),

@@ -1,10 +1,12 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+
 import { useQuery } from "@tanstack/react-query";
+
+import { PaginationWithLinks } from "../../(components)/pagination-link";
 import CardBook from "./card-book";
 import SkeletonBookCard from "./skeleton-book-card";
-import { useSearchParams } from "next/navigation";
-import { PaginationWithLinks } from "../../(components)/pagination-link";
 
 interface BookType {
   bookId: number;
@@ -23,7 +25,7 @@ interface BookResponse {
 
 const fetchBooks = async (
   page: number,
-  limit: number
+  limit: number,
 ): Promise<BookResponse> => {
   const response = await fetch(`/api/books?page=${page}&limit=${limit}`);
   if (!response.ok) throw new Error("Failed to fetch books");
@@ -42,7 +44,7 @@ export default function ListAllBooks() {
 
   if (isLoading) {
     return (
-      <section className="grid grid-cols-1 md:grid-cols-4 gap-5">
+      <section className="grid grid-cols-1 gap-5 md:grid-cols-4">
         {Array.from({ length: 8 }).map((_, index) => (
           <SkeletonBookCard key={index} />
         ))}
@@ -64,7 +66,7 @@ export default function ListAllBooks() {
 
   return (
     <section className="flex flex-col gap-5">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-4">
         {data?.books?.map((book) => (
           <CardBook
             key={book.bookId}

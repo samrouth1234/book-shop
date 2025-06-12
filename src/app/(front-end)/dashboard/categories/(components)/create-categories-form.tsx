@@ -1,5 +1,9 @@
 "use client";
 
+import { useCallback } from "react";
+
+import { useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,10 +15,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { CategoriesSchemaValidation } from "@/db/types/categories.type";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -63,7 +66,7 @@ export default function CreateCategoryForm() {
     (values: CategoriesSchemaValidation) => {
       mutate(values);
     },
-    [mutate]
+    [mutate],
   );
 
   return (
@@ -93,7 +96,7 @@ export default function CreateCategoryForm() {
           />
 
           {/* Create author */}
-          <section className="md:col-span-2 flex justify-end">
+          <section className="flex justify-end md:col-span-2">
             <Button
               type="submit"
               className="cursor-pointer"

@@ -1,7 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { inspect } from "node:util";
 
 import { HttpStatus } from "@/constants/http-status";
+
+import { inspect } from "node:util";
 
 /**
  * Configuration options for creating an API error
@@ -67,7 +68,7 @@ type ErrorOptions = {
 const createErrorClass = (
   name: string,
   defaultMessage: string,
-  status: number
+  status: number,
 ) => {
   return class extends ApiError {
     constructor(messageOrOptions: string | ErrorOptions = defaultMessage) {
@@ -90,43 +91,43 @@ const createErrorClass = (
 export const BadRequestException = createErrorClass(
   "BadRequestException",
   "Bad Request",
-  HttpStatus.BAD_REQUEST
+  HttpStatus.BAD_REQUEST,
 );
 
 export const UnauthorizedException = createErrorClass(
   "UnauthorizedException",
   "Unauthorized",
-  HttpStatus.UNAUTHORIZED
+  HttpStatus.UNAUTHORIZED,
 );
 
 export const ForbiddenException = createErrorClass(
   "ForbiddenException",
   "Forbidden",
-  HttpStatus.FORBIDDEN
+  HttpStatus.FORBIDDEN,
 );
 
 export const NotFoundException = createErrorClass(
   "NotFoundException",
   "Not Found",
-  HttpStatus.NOT_FOUND
+  HttpStatus.NOT_FOUND,
 );
 
 export const TooManyRequestsException = createErrorClass(
   "TooManyRequestsException",
   "Too Many Requests",
-  HttpStatus.TOO_MANY_REQUESTS
+  HttpStatus.TOO_MANY_REQUESTS,
 );
 
 export const InternalServerErrorException = createErrorClass(
   "InternalServerErrorException",
   "Internal Server Error",
-  HttpStatus.INTERNAL_SERVER_ERROR
+  HttpStatus.INTERNAL_SERVER_ERROR,
 );
 
 export const ConflictException = createErrorClass(
   "ConflictException",
   "Conflict",
-  HttpStatus.CONFLICT
+  HttpStatus.CONFLICT,
 );
 
 type ApiResponseOptions = {
@@ -141,7 +142,7 @@ type ApiResponseOptions = {
  */
 export function HandleApiError(
   error: unknown,
-  options: ApiResponseOptions = {}
+  options: ApiResponseOptions = {},
 ) {
   // Pretty print the error object with full array expansion
   console.error(
@@ -152,7 +153,7 @@ export function HandleApiError(
       maxArrayLength: null,
       compact: false,
       breakLength: 80,
-    })
+    }),
   );
 
   if (error instanceof ApiError) {
@@ -165,7 +166,7 @@ export function HandleApiError(
       {
         status: error.status,
         headers: options.headers,
-      }
+      },
     );
   }
 
@@ -177,7 +178,7 @@ export function HandleApiError(
     {
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       headers: options.headers,
-    }
+    },
   );
 }
 
@@ -197,7 +198,7 @@ type WrapperContext<TParams extends RouteParams> = {
 // Define the handler type
 type ApiHandler<TRequest, TParams extends RouteParams> = (
   req: TRequest,
-  context: HandlerContext<TParams>
+  context: HandlerContext<TParams>,
 ) => Promise<Response>;
 
 /**
@@ -216,9 +217,9 @@ type ApiHandler<TRequest, TParams extends RouteParams> = (
  */
 export function apiHandler<
   TRequest = Request | NextRequest,
-  TParams extends RouteParams = RouteParams
+  TParams extends RouteParams = RouteParams,
 >(
-  handler: ApiHandler<TRequest, TParams>
+  handler: ApiHandler<TRequest, TParams>,
 ): (req: TRequest, context: WrapperContext<TParams>) => Promise<Response> {
   return async (req, context) => {
     try {

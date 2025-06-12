@@ -3,9 +3,9 @@ import ListAllAuthors from "./list-all-author";
 const AuthorSection = () => {
   return (
     <section>
-      <ListAllAuthors/>
+      <ListAllAuthors />
     </section>
-  )
-}
+  );
+};
 
 export default AuthorSection;

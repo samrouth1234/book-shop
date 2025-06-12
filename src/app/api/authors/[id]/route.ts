@@ -1,10 +1,12 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newAuthorSchema } from "@/db/shema";
 import { apiHandler } from "@/error";
 import { AuthorService } from "@/features/authors";
+
 import { error } from "console";
-import { NextRequest, NextResponse } from "next/server";
 
 interface AuthorProps {
   params: {
@@ -22,11 +24,11 @@ export const GET = apiHandler(
     if (!author)
       return NextResponse.json(
         { message: `Author with ID ${id} not found.` },
-        { status: HttpStatus.NOT_FOUND }
+        { status: HttpStatus.NOT_FOUND },
       );
 
     return NextResponse.json(author);
-  }
+  },
 );
 
 export const PUT = apiHandler(
@@ -41,13 +43,13 @@ export const PUT = apiHandler(
           message: "Invalid data for author update.",
           errors: updateAuthorData.error.flatten().fieldErrors,
         },
-        { status: HttpStatus.UNPROCESSABLE_ENTITY }
+        { status: HttpStatus.UNPROCESSABLE_ENTITY },
       );
     }
 
     const updated = await authorService.update(id, updateAuthorData.data);
     return NextResponse.json(updated);
-  }
+  },
 );
 
 export const DELETE = apiHandler(
@@ -55,5 +57,5 @@ export const DELETE = apiHandler(
     const id = Number(params.id);
     const deleted = await authorService.deleted(id);
     return NextResponse.json(deleted);
-  }
+  },
 );

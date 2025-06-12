@@ -1,4 +1,8 @@
 "use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 import {
   Accordion,
   AccordionContent,
@@ -6,16 +10,15 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+
 import {
+  BookMinus,
   BookOpenText,
   ChartBarStacked,
   ChartNoAxesCombined,
   ChartPie,
   LayoutDashboard,
-  BookMinus,
 } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 interface NavItemProps {
   href: string;
@@ -31,10 +34,10 @@ function NavItem({ href, icon, children }: NavItemProps) {
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-2 px-3 py-2 text-sm font-semibold text-gray-700 rounded-lg transition-colors duration-200",
+        "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 transition-colors duration-200",
         isActive
           ? "bg-blue-50 text-blue-700"
-          : "hover:bg-gray-50 hover:text-gray-900"
+          : "hover:bg-gray-50 hover:text-gray-900",
       )}
     >
       {icon}
@@ -51,10 +54,10 @@ function SidebarListItem({ href, label }: { href: string; label: string }) {
     <Link
       href={href}
       className={cn(
-        "block px-6 py-1.5 mb-1 text-sm rounded-md transition-colors",
+        "mb-1 block rounded-md px-6 py-1.5 text-sm transition-colors",
         isActive
-          ? "bg-blue-100 text-blue-700 font-semibold"
-          : "text-gray-700 hover:bg-gray-100"
+          ? "bg-blue-100 font-semibold text-blue-700"
+          : "text-gray-700 hover:bg-gray-100",
       )}
     >
       {label}
@@ -79,14 +82,14 @@ export default function AppSideBarBook() {
           Analytics
         </NavItem>
         <section className="py-3">
-          <p className="px-3 text-xs font-medium uppercase text-gray-500">
+          <p className="px-3 text-xs font-medium text-gray-500 uppercase">
             Collections
           </p>
           <section className="mt-2">
             {/* Book */}
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1">
-                <AccordionTrigger className="py-2 px-3 text-gray-700 hover:bg-gray-50">
+                <AccordionTrigger className="px-3 py-2 text-gray-700 hover:bg-gray-50">
                   {" "}
                   <p className="flex justify-start gap-2">
                     {" "}
@@ -108,7 +111,7 @@ export default function AppSideBarBook() {
             {/* Author */}
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1">
-                <AccordionTrigger className="py-2 px-3 text-gray-700 hover:bg-gray-50">
+                <AccordionTrigger className="px-3 py-2 text-gray-700 hover:bg-gray-50">
                   {" "}
                   <p className="flex justify-start gap-2">
                     {" "}
@@ -130,7 +133,7 @@ export default function AppSideBarBook() {
             {/* Categories */}
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1">
-                <AccordionTrigger className="py-2 px-3 text-gray-700 hover:bg-gray-50">
+                <AccordionTrigger className="px-3 py-2 text-gray-700 hover:bg-gray-50">
                   {" "}
                   <p className="flex justify-start gap-2">
                     {" "}

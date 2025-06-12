@@ -1,9 +1,12 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+
 import loading from "@/../../public/loading-animation.svg";
+import { PaginationWithLinks } from "@/app/(front-end)/(components)/pagination-link";
 import {
   Table,
   TableBody,
@@ -12,9 +15,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PaginationWithLinks } from "@/app/(front-end)/(components)/pagination-link";
-import { useState } from "react";
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+
 import DeletedCategoriesMoadal from "./deleted-categories-moadal";
 import EditCategoriesModal from "./edit-categories-moadal";
 
@@ -30,7 +34,7 @@ interface CategoriesResponse {
 
 const fetchCategories = async (
   page: number,
-  limit: number
+  limit: number,
 ): Promise<CategoriesResponse> => {
   const response = await fetch(`/api/categories?page=${page}&limit=${limit}`);
   if (!response.ok) throw new Error("Failed to fetch categories");
@@ -51,7 +55,7 @@ const ListAllCategories = () => {
   const [isOpenModalEditCategories, setOpenModalEditCategories] =
     useState<boolean>(false);
   const [editCategories, setEditCategories] = useState<CategoriesType | null>(
-    null
+    null,
   );
 
   const page = Number.parseInt(searchParam.get("page") || "1");
@@ -157,7 +161,7 @@ const ListAllCategories = () => {
 
   if (isError || !data) {
     return (
-      <p className="text-red-500 text-center">
+      <p className="text-center text-red-500">
         Failed to load categories. Please try again later.
       </p>
     );
@@ -168,7 +172,7 @@ const ListAllCategories = () => {
       <Table>
         <TableHeader className="bg-gray-50">
           <TableRow>
-            <TableHead className="border-r p-4 w-20">Categories ID</TableHead>
+            <TableHead className="w-20 border-r p-4">Categories ID</TableHead>
             <TableHead className="border-r">Name</TableHead>
           </TableRow>
         </TableHeader>
@@ -180,14 +184,14 @@ const ListAllCategories = () => {
                 <TableCell>{category.name}</TableCell>
                 <TableCell className="w-44">
                   <button
-                    className="cursor-pointer pe-3 text-indigo-500 hover:underline hover:text-indigo-400"
+                    className="cursor-pointer pe-3 text-indigo-500 hover:text-indigo-400 hover:underline"
                     type="button"
                     onClick={() => openEditModal(category)}
                   >
                     Edit
                   </button>
                   <button
-                    className="cursor-pointer text-red-500 hover:underline hover:text-red-400"
+                    className="cursor-pointer text-red-500 hover:text-red-400 hover:underline"
                     type="button"
                     onClick={() => openModal(category.id)}
                   >
@@ -198,7 +202,7 @@ const ListAllCategories = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={3} className="text-center py-4">
+              <TableCell colSpan={3} className="py-4 text-center">
                 {isLoading ? "Loading categories..." : "No categories found."}
               </TableCell>
             </TableRow>
@@ -206,7 +210,7 @@ const ListAllCategories = () => {
         </TableBody>
       </Table>
       {/* pagination */}
-      <section className="flex justify-end mt-5">
+      <section className="mt-5 flex justify-end">
         <div className="cursor-pointer">
           <PaginationWithLinks
             page={page}

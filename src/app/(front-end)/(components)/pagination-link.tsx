@@ -4,8 +4,16 @@ import { type ReactNode, useCallback } from "react";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 export interface PaginationWithLinksProps {
   pageSizeSelectOptions?: {
@@ -38,7 +46,7 @@ export function PaginationWithLinks({
       newSearchParams.set(key, String(newPage));
       return newSearchParams.toString();
     },
-    [searchParams, pageSearchParam]
+    [searchParams, pageSearchParam],
   );
 
   const handlePageChange = (newPage: number) => {
@@ -60,7 +68,7 @@ export function PaginationWithLinks({
             >
               {i}
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
     } else {
@@ -72,14 +80,14 @@ export function PaginationWithLinks({
           >
             1
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
 
       if (page > 3) {
         items.push(
           <PaginationItem key="ellipsis-start">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -95,7 +103,7 @@ export function PaginationWithLinks({
             >
               {i}
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -103,7 +111,7 @@ export function PaginationWithLinks({
         items.push(
           <PaginationItem key="ellipsis-end">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -115,7 +123,7 @@ export function PaginationWithLinks({
           >
             {totalPageCount}
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
     }
 

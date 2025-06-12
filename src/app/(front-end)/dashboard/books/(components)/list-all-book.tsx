@@ -1,5 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+
+import loading from "@/../../public/loading-animation.svg";
 import { PaginationWithLinks } from "@/app/(front-end)/(components)/pagination-link";
 import {
   Table,
@@ -9,14 +15,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 import { toast } from "sonner";
+
 import DeletedBookMoadal from "./deleted-book-modal";
 import EditBookModal from "./edit-book-modal";
-import loading from "@/../../public/loading-animation.svg";
-import Image from "next/image";
 
 interface BookType {
   bookId: number;
@@ -35,7 +39,7 @@ interface BookResponse {
 
 const fetchBooks = async (
   page: number,
-  limit: number
+  limit: number,
 ): Promise<BookResponse> => {
   const response = await fetch(`/api/books?page=${page}&limit=${limit}`);
   if (!response.ok) throw new Error("Failed to fetch books");
@@ -87,7 +91,7 @@ const ListAllBooks = () => {
     }
     closeModal();
   };
-  
+
   // function for call edit book
   const handleEditBook = (updatedBook: BookType) => {
     editBookMutation.mutate(updatedBook);
@@ -143,7 +147,7 @@ const ListAllBooks = () => {
 
   if (isLoading) {
     return (
-      <p className="flex justify-center m-auto">
+      <p className="m-auto flex justify-center">
         <Image
           src={loading}
           width={100}
@@ -157,7 +161,7 @@ const ListAllBooks = () => {
 
   if (isError || !data) {
     return (
-      <p className="text-red-500 text-center">
+      <p className="text-center text-red-500">
         Failed to load books. Please try again later.
       </p>
     );
@@ -168,10 +172,10 @@ const ListAllBooks = () => {
       <Table>
         <TableHeader className="bg-gray-50">
           <TableRow>
-            <TableHead className="border-r-1 p-4 w-20">Book ID</TableHead>
+            <TableHead className="w-20 border-r-1 p-4">Book ID</TableHead>
             <TableHead className="border-r-1">Title</TableHead>
             <TableHead className="border-r-1">Description</TableHead>
-            <TableHead className="border-r-1 w-20">Price</TableHead>
+            <TableHead className="w-20 border-r-1">Price</TableHead>
             <TableHead className="w-20 border-r-1">Stock</TableHead>
             <TableHead className="border-r-1">Category Name</TableHead>
             <TableHead className="border-r-1">Author Name</TableHead>
@@ -190,14 +194,14 @@ const ListAllBooks = () => {
               <TableCell>{book.authorName}</TableCell>
               <TableCell>
                 <button
-                  className="cursor-pointer pe-3 text-indigo-500 hover:underline hover:text-indigo-400"
+                  className="cursor-pointer pe-3 text-indigo-500 hover:text-indigo-400 hover:underline"
                   type="button"
                   onClick={() => openEditModal(book)}
                 >
                   Edit
                 </button>
                 <button
-                  className="cursor-pointer text-red-500 hover:underline hover:text-red-400"
+                  className="cursor-pointer text-red-500 hover:text-red-400 hover:underline"
                   type="button"
                   onClick={() => openModal(book.bookId)}
                 >

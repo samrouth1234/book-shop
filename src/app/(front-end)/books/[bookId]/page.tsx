@@ -1,7 +1,8 @@
+import Image from "next/image";
+
 import BookShopLayout from "@/components/layout/book-shop/book-shop-layout";
 import { db } from "@/db";
 import { BookService } from "@/features/books";
-import Image from "next/image";
 
 interface ViewBookDetailProps {
   params: {
@@ -46,8 +47,8 @@ export default async function ViewBookDetails({ params }: ViewBookDetailProps) {
             className="h-full w-full object-cover transition-transform group-hover:scale-105"
           />
         </section>
-        <section className="col-span-2 overflow-y-auto h-96">
-          <h2 className="text-5xl font-semibold py-2">{book.title}</h2>
+        <section className="col-span-2 h-96 overflow-y-auto">
+          <h2 className="py-2 text-5xl font-semibold">{book.title}</h2>
           <p>{book.categoryName}</p>
           <p>{book.authorName}</p>
         </section>

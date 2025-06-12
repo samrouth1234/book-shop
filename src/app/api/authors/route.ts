@@ -1,9 +1,10 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newAuthorSchema } from "@/db/shema";
 import { apiHandler } from "@/error";
 import { AuthorService } from "@/features/authors";
-import { NextRequest, NextResponse } from "next/server";
 
 const authorService = new AuthorService(db);
 
@@ -27,7 +28,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
           message: "Validation failed",
           errors: result.error.flatten().fieldErrors,
         },
-        { status: HttpStatus.BAD_REQUEST }
+        { status: HttpStatus.BAD_REQUEST },
       );
     }
 
@@ -38,7 +39,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
         message: "Author created successfully",
         data: author,
       },
-      { status: HttpStatus.CREATED }
+      { status: HttpStatus.CREATED },
     );
   } catch (err) {
     return NextResponse.json(
@@ -47,7 +48,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
         message: "Internal server error",
         error: err instanceof Error ? err.message : "Unexpected error",
       },
-      { status: HttpStatus.INTERNAL_SERVER_ERROR }
+      { status: HttpStatus.INTERNAL_SERVER_ERROR },
     );
   }
 });

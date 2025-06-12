@@ -1,9 +1,10 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newCategorySchema } from "@/db/shema";
 import { apiHandler } from "@/error";
 import { CategoryService } from "@/features/categories";
-import { NextRequest, NextResponse } from "next/server";
 
 const categorySerive = new CategoryService(db);
 
@@ -14,7 +15,7 @@ export const GET = apiHandler(async (req: Request) => {
 
   const { categorys, totalCategorys } = await categorySerive.getAll(
     page,
-    limit
+    limit,
   );
 
   return NextResponse.json({
@@ -35,7 +36,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
           message: "Validation failed",
           errors: result.error.flatten().fieldErrors,
         },
-        { status: HttpStatus.BAD_REQUEST }
+        { status: HttpStatus.BAD_REQUEST },
       );
     }
 
@@ -46,7 +47,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
         message: "Categories created successfully",
         data: category,
       },
-      { status: HttpStatus.CREATED }
+      { status: HttpStatus.CREATED },
     );
   } catch (err) {
     return NextResponse.json(
@@ -55,7 +56,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
         message: "Internal server error",
         error: err instanceof Error ? err.message : "Unexpected error",
       },
-      { status: HttpStatus.INTERNAL_SERVER_ERROR }
+      { status: HttpStatus.INTERNAL_SERVER_ERROR },
     );
   }
 });

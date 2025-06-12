@@ -8,7 +8,7 @@ interface BookShopLayoutProps {
 }
 export default function BookShopLayout({ children }: BookShopLayoutProps) {
   return (
-    <main className="container max-w-7xl m-auto">
+    <main className="container m-auto max-w-7xl">
       <Navbar />
       {children}
       <Toaster richColors position="top-right" />

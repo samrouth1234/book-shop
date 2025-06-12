@@ -36,7 +36,7 @@ export const env = createEnv({
  * and then validate data at runtime — all with TypeScript type safety.
  *
  * 🧠 Why Use Zod?
- * 
+ *
  * ✅ Type-safe	Automatically infers TypeScript types from schemas
  * ⚡ Fast	Lightweight and performant
  * 🔄 Runtime + compile-time	Validates at runtime + provides TS types at compile-time

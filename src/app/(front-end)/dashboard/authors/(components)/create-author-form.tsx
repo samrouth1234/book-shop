@@ -1,5 +1,9 @@
 "use client";
 
+import { useCallback } from "react";
+
+import { useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,14 +15,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { AuthorSchemaValidation } from "@/db/types/author.type";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
-import { AuthorSchemaValidation } from "@/db/types/author.type";
 
 const createAuthor = async (values: AuthorSchemaValidation) => {
   const response = await fetch(`/api/authors`, {
@@ -66,7 +68,7 @@ export default function CreateAuthorForm() {
     (values: AuthorSchemaValidation) => {
       mutate(values);
     },
-    [mutate]
+    [mutate],
   );
 
   return (
@@ -111,7 +113,7 @@ export default function CreateAuthorForm() {
           />
 
           {/* Create author */}
-          <section className="md:col-span-2 flex justify-end">
+          <section className="flex justify-end md:col-span-2">
             <Button
               type="submit"
               className="cursor-pointer"

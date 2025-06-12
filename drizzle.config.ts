@@ -1,5 +1,6 @@
-import { Config, defineConfig } from "drizzle-kit";
 import { config } from "dotenv";
+import { Config, defineConfig } from "drizzle-kit";
+
 import { env } from "./src/env";
 
 // Load environment variables from .env file

@@ -1,5 +1,6 @@
 import { DbType } from "@/db";
 import { categoriesTable, newCategory } from "@/db/shema";
+
 import { count, eq } from "drizzle-orm";
 
 export class CategoryRepository {

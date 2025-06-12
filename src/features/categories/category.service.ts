@@ -1,7 +1,9 @@
 import { DbType } from "@/db";
-import { CategoryRepository } from "./category.repository";
-import { ne } from "drizzle-orm";
 import { newCategory } from "@/db/shema";
+
+import { ne } from "drizzle-orm";
+
+import { CategoryRepository } from "./category.repository";
 
 export class CategoryService {
   private readonly categoryRepository: CategoryRepository;
@@ -9,7 +11,7 @@ export class CategoryService {
   constructor(private readonly dbInstance: DbType) {
     this.categoryRepository = new CategoryRepository(this.dbInstance);
   }
-  
+
   // Create Category
   async create(data: newCategory) {
     return this.categoryRepository.create(data);

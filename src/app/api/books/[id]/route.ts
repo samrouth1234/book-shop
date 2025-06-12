@@ -1,10 +1,12 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newBookSchema } from "@/db/shema";
 import { apiHandler } from "@/error";
 import { BookService } from "@/features/books";
+
 import { error } from "console";
-import { NextRequest, NextResponse } from "next/server";
 
 const bookService = new BookService(db);
 
@@ -22,10 +24,10 @@ export const GET = apiHandler(
     if (!book)
       return NextResponse.json(
         { message: `Book with ID ${id} not found.` },
-        { status: HttpStatus.NOT_FOUND }
+        { status: HttpStatus.NOT_FOUND },
       );
     return NextResponse.json(book);
-  }
+  },
 );
 
 export const PUT = apiHandler(
@@ -40,13 +42,13 @@ export const PUT = apiHandler(
           message: "Invalid data for book update.",
           errors: updateBookData.error.flatten().fieldErrors,
         },
-        { status: HttpStatus.UNPROCESSABLE_ENTITY }
+        { status: HttpStatus.UNPROCESSABLE_ENTITY },
       );
     }
 
     const updated = await bookService.update(id, updateBookData.data);
     return NextResponse.json(updated);
-  }
+  },
 );
 
 export const DELETE = apiHandler(
@@ -54,5 +56,5 @@ export const DELETE = apiHandler(
     const id = Number(params.id);
     const deleted = await bookService.delete(id);
     return NextResponse.json(deleted);
-  }
+  },
 );

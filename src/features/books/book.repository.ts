@@ -1,6 +1,7 @@
 import { DbType } from "@/db";
 import { authorTable, bookTable, categoriesTable, newBook } from "@/db/shema";
-import { eq, count } from "drizzle-orm";
+
+import { count, eq } from "drizzle-orm";
 
 export class BookRepository {
   constructor(private readonly db: DbType) {}

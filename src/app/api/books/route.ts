@@ -1,9 +1,10 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newBookSchema } from "@/db/shema";
 import { apiHandler } from "@/error";
 import { BookService } from "@/features/books";
-import { NextRequest, NextResponse } from "next/server";
 
 const bookService = new BookService(db);
 
@@ -27,7 +28,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
           message: "Validation failed",
           errors: result.error.flatten().fieldErrors,
         },
-        { status: HttpStatus.BAD_REQUEST }
+        { status: HttpStatus.BAD_REQUEST },
       );
     }
     const book = await bookService.create(result.data);
@@ -37,7 +38,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
         message: "Book created successfully",
         data: book,
       },
-      { status: HttpStatus.CREATED }
+      { status: HttpStatus.CREATED },
     );
   } catch (err) {
     return NextResponse.json(
@@ -46,7 +47,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
         message: "Internal server error",
         error: err instanceof Error ? err.message : "Unexpected error",
       },
-      { status: HttpStatus.INTERNAL_SERVER_ERROR }
+      { status: HttpStatus.INTERNAL_SERVER_ERROR },
     );
   }
 });

@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
 
 interface BookType {
   title: string;
@@ -62,7 +63,7 @@ const EditBookModal: React.FC<EditBookModalProps> = ({
           <DialogHeader>
             <DialogTitle>Edit Book</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             {/* Title */}
             <div className="grid flex-1 gap-2">
               <Label htmlFor="title">Title</Label>

@@ -1,4 +1,7 @@
 "use client";
+
+import { useState } from "react";
+
 import {
   Select,
   SelectContent,
@@ -7,12 +10,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
 
 import CartBar from "./chart-bar";
+import ChartBarStacked from "./chart-bar-stacked";
 import ChartLineDosts from "./chart-line-dosts";
 import { allChartData } from "./data-all-chart";
-import ChartBarStacked from "./chart-bar-stacked";
 
 type YearType =
   | "2020"
@@ -66,7 +68,7 @@ const ReportsSection = () => {
           </Tabs>
         </section>
       </section>
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <section className="grid grid-cols-1 gap-5 md:grid-cols-3">
         <section>
           <CartBar chartData={currentChartData.barChart} />
         </section>

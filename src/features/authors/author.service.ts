@@ -1,6 +1,7 @@
 import { DbType } from "@/db";
-import { AuthorRepository } from "./author.repository";
 import { newAuthor } from "@/db/shema";
+
+import { AuthorRepository } from "./author.repository";
 
 export class AuthorService {
   private readonly authorRepository: AuthorRepository;

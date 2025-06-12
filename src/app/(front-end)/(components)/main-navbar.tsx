@@ -1,5 +1,3 @@
-import { Menu } from "lucide-react";
-
 import {
   Accordion,
   AccordionContent,
@@ -22,6 +20,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+
+import { Menu } from "lucide-react";
 
 interface MenuItem {
   title: string;
@@ -121,7 +121,7 @@ const Navbar = ({
               {logo.title}
             </span>
           </a>
-          <section className="flex justify-center items-center m-auto gap-5">
+          <section className="m-auto flex items-center justify-center gap-5">
             <NavigationMenu>
               <NavigationMenuList>
                 {menu.map((item) => renderMenuItem(item))}
@@ -206,7 +206,7 @@ const renderMenuItem = (item: MenuItem) => {
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
         href={item.url}
-        className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground"
+        className="group bg-background hover:bg-muted hover:text-accent-foreground inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors"
       >
         {item.title}
       </NavigationMenuLink>
@@ -240,14 +240,14 @@ const renderMobileMenuItem = (item: MenuItem) => {
 const SubMenuLink = ({ item }: { item: MenuItem }) => {
   return (
     <a
-      className="flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-muted hover:text-accent-foreground"
+      className="hover:bg-muted hover:text-accent-foreground flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
       href={item.url}
     >
       <p className="text-foreground">{item.icon}</p>
       <section>
         <p className="text-sm font-semibold">{item.title}</p>
         {item.description && (
-          <p className="text-sm leading-snug text-muted-foreground">
+          <p className="text-muted-foreground text-sm leading-snug">
             {item.description}
           </p>
         )}

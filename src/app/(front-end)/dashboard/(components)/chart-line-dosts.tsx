@@ -1,14 +1,5 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import {
-  ResponsiveContainer,
-  CartesianGrid,
-  Line,
-  LineChart,
-  XAxis,
-  YAxis,
-} from "recharts";
 import {
   Card,
   CardContent,
@@ -23,6 +14,16 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+
+import { TrendingUp } from "lucide-react";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 type ChartDataItem = {
   month: string;
@@ -70,9 +71,7 @@ const ChartLineDosts = ({ chartData }: ChartLineDostsProps) => {
               tickMargin={8}
               tickFormatter={(value) => value}
             />
-            <YAxis
-              padding={{ top: 50}}
-            />
+            <YAxis padding={{ top: 50 }} />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}

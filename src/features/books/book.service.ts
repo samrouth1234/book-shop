@@ -1,6 +1,7 @@
 import { DbType } from "@/db";
-import { BookRepository } from "./book.repository";
 import { newBook } from "@/db/shema";
+
+import { BookRepository } from "./book.repository";
 
 export class BookService {
   private readonly bookRepository: BookRepository;

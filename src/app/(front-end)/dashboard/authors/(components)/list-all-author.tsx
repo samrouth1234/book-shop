@@ -1,9 +1,12 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+
 import loading from "@/../../public/loading-animation.svg";
+import { PaginationWithLinks } from "@/app/(front-end)/(components)/pagination-link";
 import {
   Table,
   TableBody,
@@ -12,9 +15,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PaginationWithLinks } from "@/app/(front-end)/(components)/pagination-link";
-import { useState } from "react";
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+
 import DeletedAuthorMoadal from "./deleted-author-modal";
 import EditAuthorModal from "./edit-author-modal";
 
@@ -31,7 +35,7 @@ interface AuthorResponse {
 
 const fetchAuthors = async (
   page: number,
-  limit: number
+  limit: number,
 ): Promise<AuthorResponse> => {
   const response = await fetch(`/api/authors?page=${page}&limit=${limit}`);
   if (!response.ok) throw new Error("Failed to fetch authors");
@@ -154,7 +158,7 @@ const ListAllAuthors = () => {
 
   if (isError || !data) {
     return (
-      <p className="text-red-500 text-center">
+      <p className="text-center text-red-500">
         Failed to load authors. Please try again later.
       </p>
     );
@@ -165,7 +169,7 @@ const ListAllAuthors = () => {
       <Table>
         <TableHeader className="bg-gray-50">
           <TableRow>
-            <TableHead className="border-r p-4 w-20">Author ID</TableHead>
+            <TableHead className="w-20 border-r p-4">Author ID</TableHead>
             <TableHead className="border-r">Name</TableHead>
             <TableHead className="border-r">Bio</TableHead>
             <TableHead className="w-44">Action</TableHead>
@@ -179,14 +183,14 @@ const ListAllAuthors = () => {
               <TableCell>{author.bio || "Unknown"}</TableCell>
               <TableCell>
                 <button
-                  className="cursor-pointer pe-3 text-indigo-500 hover:underline hover:text-indigo-400"
+                  className="cursor-pointer pe-3 text-indigo-500 hover:text-indigo-400 hover:underline"
                   type="button"
                   onClick={() => openEditModal(author)}
                 >
                   Edit
                 </button>
                 <button
-                  className="cursor-pointer text-red-500 hover:underline hover:text-red-400"
+                  className="cursor-pointer text-red-500 hover:text-red-400 hover:underline"
                   type="button"
                   onClick={() => openModal(author.id)}
                 >
@@ -198,7 +202,7 @@ const ListAllAuthors = () => {
         </TableBody>
       </Table>
       {/* pagination */}
-      <section className="flex justify-end mt-5">
+      <section className="mt-5 flex justify-end">
         <div className="cursor-pointer">
           <PaginationWithLinks
             page={page}

@@ -1,9 +1,10 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newCategorySchema } from "@/db/shema";
 import { apiHandler } from "@/error";
 import { CategoryService } from "@/features/categories";
-import { NextRequest, NextResponse } from "next/server";
 
 const categorySerive = new CategoryService(db);
 
@@ -21,10 +22,10 @@ export const GET = apiHandler(
     if (!category)
       return NextResponse.json(
         { message: `Category with ID ${id} not found.` },
-        { status: HttpStatus.NOT_FOUND }
+        { status: HttpStatus.NOT_FOUND },
       );
     return NextResponse.json(category);
-  }
+  },
 );
 
 export const PUT = apiHandler(
@@ -39,13 +40,13 @@ export const PUT = apiHandler(
           message: "Invalid data for category update.",
           errors: updateCategoryData.error.flatten().fieldErrors,
         },
-        { status: HttpStatus.UNPROCESSABLE_ENTITY }
+        { status: HttpStatus.UNPROCESSABLE_ENTITY },
       );
     }
 
     const updated = await categorySerive.update(id, updateCategoryData.data);
     return NextResponse.json(updated);
-  }
+  },
 );
 
 export const DELETE = apiHandler(
@@ -53,5 +54,5 @@ export const DELETE = apiHandler(
     const id = Number(params.id);
     const deleted = await categorySerive.deleted(id);
     return NextResponse.json(deleted);
-  }
+  },
 );

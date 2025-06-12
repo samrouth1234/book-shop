@@ -1,5 +1,9 @@
 "use client";
 
+import { useCallback } from "react";
+
+import { useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -10,15 +14,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { BookSchemaValidation } from "@/db/types/book.type";
 import { Textarea } from "@/components/ui/textarea";
+import { BookSchemaValidation } from "@/db/types/book.type";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
 
 const createBook = async (values: BookSchemaValidation) => {
   const response = await fetch(`/api/books`, {
@@ -70,7 +72,7 @@ export default function CreateBookForm() {
     (values: BookSchemaValidation) => {
       mutate(values);
     },
-    [mutate]
+    [mutate],
   );
 
   return (
@@ -179,7 +181,7 @@ export default function CreateBookForm() {
           />
 
           {/* create book */}
-          <section className="md:col-span-2 flex justify-end">
+          <section className="flex justify-end md:col-span-2">
             <Button
               type="submit"
               className="cursor-pointer"

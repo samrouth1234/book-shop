@@ -3,9 +3,9 @@ import ListAllCategories from "./list-all-categories";
 const CategoriesSection = () => {
   return (
     <div>
-      <ListAllCategories/>
+      <ListAllCategories />
     </div>
-  )
-}
+  );
+};
 
 export default CategoriesSection;

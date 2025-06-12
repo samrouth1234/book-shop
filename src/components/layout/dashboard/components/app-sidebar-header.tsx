@@ -1,16 +1,17 @@
+import Image from "next/image";
+
+import Logo from "@/../../public/images/cat-cute.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Bell, Grid, Search } from "lucide-react";
 
-import Image from "next/image";
-import Logo from "@/../../public/images/cat-cute.jpg";
+import { Bell, Grid, Search } from "lucide-react";
 
 export default function AppSideBarHeader() {
   return (
     <header className="flex items-center justify-between border-b px-6 py-4">
       <div className="w-96">
         <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+          <Search className="absolute top-2.5 left-2.5 h-4 w-4 text-gray-500" />
           <Input type="search" placeholder="Search files..." className="pl-9" />
         </div>
       </div>

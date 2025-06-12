@@ -1,10 +1,9 @@
+import * as schema from "@/db/shema/index";
 import { env } from "@/env";
 
 import { drizzle } from "drizzle-orm/node-postgres";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
-
-import * as schema from "@/db/shema/index";
 
 /***
  * @package Do : env
@@ -39,7 +38,7 @@ export const db = drizzle(pool, {
         `Query: ${query} ${
           params ? `\nParams: ${JSON.stringify(params)}` : ""
         }`,
-        "drizzle"
+        "drizzle",
       );
     },
   },
