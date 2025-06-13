@@ -5,6 +5,13 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
+export async function getDb() {
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  });
+  return drizzle(pool);
+}
+
 /***
  * @package Do : env
  * @param connectionString This is the PostgreSQL connection URL, typically from .env.local like: postgresql://user:password@localhost:5432/dbname

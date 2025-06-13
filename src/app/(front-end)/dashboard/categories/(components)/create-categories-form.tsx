@@ -15,27 +15,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { CategoriesSchemaValidation } from "@/db/types/categories.type";
+import { createCategories } from "@/lib/helper/categories/api";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-const createCategories = async (values: CategoriesSchemaValidation) => {
-  const response = await fetch(`/api/categories`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(values),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to create categories");
-  }
-
-  return response.json();
-};
 
 export default function CreateCategoryForm() {
   const router = useRouter();

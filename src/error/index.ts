@@ -226,7 +226,6 @@ export function apiHandler<
       const resolvedContext = {
         params: await context.params,
       };
-
       const response = await handler(req, resolvedContext);
       return response;
     } catch (error) {

@@ -4,7 +4,7 @@ import DashboardLayout from "@/components/layout/dashboard/dashboard-layout";
 
 import CategoriesSection from "./(components)/categories-section";
 
-export default function page() {
+export default function CategoriesPage() {
   return (
     <DashboardLayout>
       <Suspense fallback={<div>Loading category...</div>}>

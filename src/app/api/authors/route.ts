@@ -3,21 +3,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newAuthorSchema } from "@/db/shema";
-import { apiHandler } from "@/error";
 import { AuthorService } from "@/features/authors";
+import { paginatedResponse } from "@/lib/api-response";
 
 const authorService = new AuthorService(db);
 
-export const GET = apiHandler(async (req: Request) => {
+export const GET = async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
 
-  const authors = await authorService.getAll(page, limit);
-  return NextResponse.json(authors);
-});
+  const { authors, totalAuthors } = await authorService.getAll(page, limit);
+  return NextResponse.json(
+    paginatedResponse(authors, totalAuthors, page, limit),
+  );
+};
 
-export const POST = apiHandler(async (req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
   try {
     const json = await req.json();
     const result = newAuthorSchema.safeParse(json);
@@ -51,4 +53,4 @@ export const POST = apiHandler(async (req: NextRequest) => {
       { status: HttpStatus.INTERNAL_SERVER_ERROR },
     );
   }
-});
+};

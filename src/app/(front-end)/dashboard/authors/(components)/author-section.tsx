@@ -1,4 +1,4 @@
-import ListAllAuthors from "./list-all-author";
+import ListAllAuthors from "./author-list";
 
 const AuthorSection = () => {
   return (

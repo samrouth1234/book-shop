@@ -15,31 +15,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  deletedCategoies,
+  fetchCategories,
+  updatedCategories,
+} from "@/lib/helper/categories/api";
+import { CategoriesType } from "@/types";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import DeletedCategoriesMoadal from "./deleted-categories-moadal";
 import EditCategoriesModal from "./edit-categories-moadal";
-
-interface CategoriesType {
-  id: number;
-  name: string;
-}
-
-interface CategoriesResponse {
-  categories: CategoriesType[];
-  totalCategories: number;
-}
-
-const fetchCategories = async (
-  page: number,
-  limit: number,
-): Promise<CategoriesResponse> => {
-  const response = await fetch(`/api/categories?page=${page}&limit=${limit}`);
-  if (!response.ok) throw new Error("Failed to fetch categories");
-  return response.json();
-};
 
 const ListAllCategories = () => {
   const searchParam = useSearchParams();
@@ -98,20 +85,14 @@ const ListAllCategories = () => {
     editCategoriesMutation.mutate(updatedCategories);
   };
 
-  const { data, isLoading, isError } = useQuery<CategoriesResponse>({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["categories", page, limit],
     queryFn: () => fetchCategories(page, limit),
   });
 
   // mutation deleted categories
   const deleteCategoriesMutation = useMutation({
-    mutationFn: async (categoriesId: number) => {
-      const response = await fetch(`/api/categories/${categoriesId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Failed to deteled categories");
-      return response.json();
-    },
+    mutationFn: (categoriesId: number) => deletedCategoies(categoriesId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast.success("Categories deleted successfully!");
@@ -123,18 +104,8 @@ const ListAllCategories = () => {
 
   // edit categories mutaion
   const editCategoriesMutation = useMutation({
-    mutationFn: async (updatedCategories: CategoriesType) => {
-      const response = await fetch(`/api/categories/${updatedCategories.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...updatedCategories,
-        }),
-      });
-      console.log(JSON.stringify(updatedCategories));
-      if (!response.ok) throw new Error("Failed to update categories");
-      return response.json();
-    },
+    mutationFn: (oldCategories: CategoriesType) =>
+      updatedCategories(oldCategories),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast.success("Categories updated successfully!");
@@ -177,36 +148,28 @@ const ListAllCategories = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.categories?.length ? (
-            data.categories.map((category) => (
-              <TableRow key={category.id}>
-                <TableCell className="p-4">{category.id}</TableCell>
-                <TableCell>{category.name}</TableCell>
-                <TableCell className="w-44">
-                  <button
-                    className="cursor-pointer pe-3 text-indigo-500 hover:text-indigo-400 hover:underline"
-                    type="button"
-                    onClick={() => openEditModal(category)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="cursor-pointer text-red-500 hover:text-red-400 hover:underline"
-                    type="button"
-                    onClick={() => openModal(category.id)}
-                  >
-                    Delete
-                  </button>
-                </TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={3} className="py-4 text-center">
-                {isLoading ? "Loading categories..." : "No categories found."}
+          {data?.items.map((category) => (
+            <TableRow key={category.id}>
+              <TableCell className="p-4">{category.id}</TableCell>
+              <TableCell>{category.name}</TableCell>
+              <TableCell className="w-44">
+                <button
+                  className="cursor-pointer pe-3 text-indigo-500 hover:text-indigo-400 hover:underline"
+                  type="button"
+                  onClick={() => openEditModal(category)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="cursor-pointer text-red-500 hover:text-red-400 hover:underline"
+                  type="button"
+                  onClick={() => openModal(category.id)}
+                >
+                  Delete
+                </button>
               </TableCell>
             </TableRow>
-          )}
+          ))}
         </TableBody>
       </Table>
       {/* pagination */}
@@ -215,7 +178,7 @@ const ListAllCategories = () => {
           <PaginationWithLinks
             page={page}
             pageSize={limit}
-            totalCount={data?.totalCategories}
+            totalCount={data.totalPages}
           />
         </div>
       </section>

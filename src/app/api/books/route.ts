@@ -3,21 +3,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newBookSchema } from "@/db/shema";
-import { apiHandler } from "@/error";
 import { BookService } from "@/features/books";
+import { paginatedResponse } from "@/lib/api-response";
 
 const bookService = new BookService(db);
 
-export const GET = apiHandler(async (req: Request) => {
+export const GET = async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
 
-  const books = await bookService.getAll(page, limit);
-  return NextResponse.json(books);
-});
+  const { books, totalBooks } = await bookService.getAll(page, limit);
+  return NextResponse.json(paginatedResponse(books, totalBooks, page, limit));
+};
 
-export const POST = apiHandler(async (req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
   try {
     const json = await req.json();
     const result = newBookSchema.safeParse(json);
@@ -50,4 +50,4 @@ export const POST = apiHandler(async (req: NextRequest) => {
       { status: HttpStatus.INTERNAL_SERVER_ERROR },
     );
   }
-});
+};

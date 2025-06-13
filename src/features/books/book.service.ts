@@ -1,7 +1,7 @@
 import { DbType } from "@/db";
-import { newBook } from "@/db/shema";
 
 import { BookRepository } from "./book.repository";
+import { NewBook } from "./book.types";
 
 export class BookService {
   private readonly bookRepository: BookRepository;
@@ -10,7 +10,7 @@ export class BookService {
     this.bookRepository = new BookRepository(this.dbInstance);
   }
 
-  async create(data: newBook) {
+  async create(data: NewBook) {
     return this.bookRepository.create(data);
   }
 
@@ -23,7 +23,7 @@ export class BookService {
     return this.bookRepository.findById(bookId);
   }
 
-  async update(bookId: number, data: Partial<newBook>) {
+  async update(bookId: number, data: Partial<NewBook>) {
     return this.bookRepository.update(bookId, data);
   }
 

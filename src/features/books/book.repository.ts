@@ -1,12 +1,14 @@
 import { DbType } from "@/db";
-import { authorTable, bookTable, categoriesTable, newBook } from "@/db/shema";
+import { authorTable, bookTable, categoriesTable } from "@/db/shema";
 
 import { count, eq } from "drizzle-orm";
+
+import { NewBook } from "./book.types";
 
 export class BookRepository {
   constructor(private readonly db: DbType) {}
 
-  async create(data: newBook) {
+  async create(data: NewBook) {
     // 1. Find or Create Category
     let category = await this.db.query.categoriesTable.findFirst({
       where: eq(categoriesTable.name, data.categoryName),
@@ -90,7 +92,7 @@ export class BookRepository {
     return book;
   }
 
-  async update(bookId: number, data: Partial<newBook>) {
+  async update(bookId: number, data: Partial<NewBook>) {
     let authorId: number | undefined = undefined;
     let categoryId: number | undefined = undefined;
 
@@ -113,7 +115,7 @@ export class BookRepository {
     }
 
     // Prepare final update object
-    const updateData: Partial<newBook> & {
+    const updateData: Partial<NewBook> & {
       authorId?: number;
       categoryId?: number;
     } = {

@@ -1,4 +1,4 @@
-import ListAllBooks from "./list-all-book";
+import ListAllBooks from "./book-list";
 
 const BookSection = () => {
   return (

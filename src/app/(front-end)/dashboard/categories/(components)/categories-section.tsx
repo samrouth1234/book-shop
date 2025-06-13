@@ -1,4 +1,4 @@
-import ListAllCategories from "./list-all-categories";
+import ListAllCategories from "./categories-list";
 
 const CategoriesSection = () => {
   return (

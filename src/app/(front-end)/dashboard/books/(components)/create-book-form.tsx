@@ -16,27 +16,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { BookSchemaValidation } from "@/db/types/book.type";
+import { createBook } from "@/lib/helper/books/api";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-const createBook = async (values: BookSchemaValidation) => {
-  const response = await fetch(`/api/books`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(values),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to create book");
-  }
-
-  return response.json();
-};
 
 export default function CreateBookForm() {
   const router = useRouter();

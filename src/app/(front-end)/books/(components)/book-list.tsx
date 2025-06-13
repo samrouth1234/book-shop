@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 
 import { PaginationWithLinks } from "../../(components)/pagination-link";
-import CardBook from "./card-book";
-import SkeletonBookCard from "./skeleton-book-card";
+import CardBook from "./book-card";
+import SkeletonBookCard from "./book-card-skeleton";
 
 interface BookType {
   bookId: number;
@@ -19,8 +19,11 @@ interface BookType {
 }
 
 interface BookResponse {
-  books: BookType[];
-  totalBooks: number;
+  items: BookType[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 const fetchBooks = async (
@@ -29,7 +32,8 @@ const fetchBooks = async (
 ): Promise<BookResponse> => {
   const response = await fetch(`/api/books?page=${page}&limit=${limit}`);
   if (!response.ok) throw new Error("Failed to fetch books");
-  return response.json();
+  const json = await response.json();
+  return json.data;
 };
 
 export default function ListAllBooks() {
@@ -52,22 +56,18 @@ export default function ListAllBooks() {
     );
   }
 
-  if (isError) {
+  if (isError || !data) {
     return (
-      <p className="text-red-500">
+      <p className="text-center text-red-500">
         Failed to load books. Please try again later.
       </p>
     );
   }
 
-  if (!data || !data.books || data.books.length === 0) {
-    return <p>No books found for the current selection.</p>;
-  }
-
   return (
     <section className="flex flex-col gap-5">
       <div className="grid grid-cols-1 gap-5 md:grid-cols-4">
-        {data?.books?.map((book) => (
+        {data?.items.map((book) => (
           <CardBook
             key={book.bookId}
             bookId={book.bookId}
@@ -80,13 +80,11 @@ export default function ListAllBooks() {
           />
         ))}
       </div>
-      <div>
-        <PaginationWithLinks
-          page={page}
-          pageSize={limit}
-          totalCount={data?.totalBooks}
-        />
-      </div>
+      <PaginationWithLinks
+        page={page}
+        pageSize={limit}
+        totalCount={data.totalPages}
+      />
     </section>
   );
 }

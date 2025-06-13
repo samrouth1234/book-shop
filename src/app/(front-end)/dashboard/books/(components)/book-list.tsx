@@ -15,36 +15,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { deletdBook, fetchBooks, updateBook } from "@/lib/helper/books/api";
+import { BookType } from "@/types";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import DeletedBookMoadal from "./deleted-book-modal";
 import EditBookModal from "./edit-book-modal";
-
-interface BookType {
-  bookId: number;
-  title: string;
-  description: string;
-  price: string;
-  stock: number;
-  categoryName: string;
-  authorName: string;
-}
-
-interface BookResponse {
-  books: BookType[];
-  totalBooks: number;
-}
-
-const fetchBooks = async (
-  page: number,
-  limit: number,
-): Promise<BookResponse> => {
-  const response = await fetch(`/api/books?page=${page}&limit=${limit}`);
-  if (!response.ok) throw new Error("Failed to fetch books");
-  return response.json();
-};
 
 const ListAllBooks = () => {
   const searchParam = useSearchParams();
@@ -103,20 +81,7 @@ const ListAllBooks = () => {
   });
 
   const editBookMutation = useMutation({
-    mutationFn: async (updatedBook: BookType) => {
-      const response = await fetch(`/api/books/${updatedBook.bookId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...updatedBook,
-          // Convert Types Before Sending the Payload
-          stock: Number(updatedBook.stock),
-        }),
-      });
-      console.log(JSON.stringify(updatedBook));
-      if (!response.ok) throw new Error("Failed to update book");
-      return response.json();
-    },
+    mutationFn: (updatedBook: BookType) => updateBook(updatedBook),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["books"] });
       toast.success("Book updated successfully!");
@@ -129,13 +94,7 @@ const ListAllBooks = () => {
 
   // mutation deleted book
   const deleteBookMutation = useMutation({
-    mutationFn: async (bookId: number) => {
-      const response = await fetch(`/api/books/${bookId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Failed to deteled book");
-      return response.json();
-    },
+    mutationFn: (bookId: number) => deletdBook(bookId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["books"] });
       toast.success("Book deleted successfully!");
@@ -177,13 +136,13 @@ const ListAllBooks = () => {
             <TableHead className="border-r-1">Description</TableHead>
             <TableHead className="w-20 border-r-1">Price</TableHead>
             <TableHead className="w-20 border-r-1">Stock</TableHead>
-            <TableHead className="border-r-1">Category Name</TableHead>
+            <TableHead className="bor der-r-1">Category Name</TableHead>
             <TableHead className="border-r-1">Author Name</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.books.map((book, index) => (
+          {data?.items.map((book, index) => (
             <TableRow key={index}>
               <TableCell className="p-4">{book.bookId}</TableCell>
               <TableCell>{book.title}</TableCell>
@@ -218,7 +177,7 @@ const ListAllBooks = () => {
           <PaginationWithLinks
             page={page}
             pageSize={limit}
-            totalCount={data?.totalBooks}
+            totalCount={data.totalPages}
           />
         </div>
       </section>

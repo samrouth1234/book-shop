@@ -15,32 +15,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  deletedAuthor,
+  fetchAuthors,
+  updateAuthor,
+} from "@/lib/helper/authors/api";
+import { AuthorType } from "@/types";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import DeletedAuthorMoadal from "./deleted-author-modal";
 import EditAuthorModal from "./edit-author-modal";
-
-interface AuthorType {
-  id: number;
-  name: string;
-  bio: string;
-}
-
-interface AuthorResponse {
-  authors: AuthorType[];
-  totalAuthors: number;
-}
-
-const fetchAuthors = async (
-  page: number,
-  limit: number,
-): Promise<AuthorResponse> => {
-  const response = await fetch(`/api/authors?page=${page}&limit=${limit}`);
-  if (!response.ok) throw new Error("Failed to fetch authors");
-  return response.json();
-};
 
 const ListAllAuthors = () => {
   const searchParam = useSearchParams();
@@ -95,20 +81,14 @@ const ListAllAuthors = () => {
     editAuthorMutation.mutate(updatedAuthor);
   };
 
-  const { data, isLoading, isError } = useQuery<AuthorResponse>({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["authors", page, limit],
     queryFn: () => fetchAuthors(page, limit),
   });
 
   // mutation deleted author
   const deleteAuthorMutation = useMutation({
-    mutationFn: async (authorId: number) => {
-      const response = await fetch(`/api/authors/${authorId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Failed to deteled author");
-      return response.json();
-    },
+    mutationFn: (authorId: number) => deletedAuthor(authorId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authors"] });
       toast.success("Author deleted successfully!");
@@ -120,18 +100,7 @@ const ListAllAuthors = () => {
 
   // edit author mutaion
   const editAuthorMutation = useMutation({
-    mutationFn: async (updatedAuthor: AuthorType) => {
-      const response = await fetch(`/api/authors/${updatedAuthor.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...updatedAuthor,
-        }),
-      });
-      console.log(JSON.stringify(updatedAuthor));
-      if (!response.ok) throw new Error("Failed to update author");
-      return response.json();
-    },
+    mutationFn: (updatedAuthor: AuthorType) => updateAuthor(updatedAuthor),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authors"] });
       toast.success("Author updated successfully!");
@@ -176,7 +145,7 @@ const ListAllAuthors = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.authors.map((author) => (
+          {data?.items.map((author) => (
             <TableRow key={author.id}>
               <TableCell className="p-4">{author.id}</TableCell>
               <TableCell>{author.name}</TableCell>
@@ -207,7 +176,7 @@ const ListAllAuthors = () => {
           <PaginationWithLinks
             page={page}
             pageSize={limit}
-            totalCount={data?.totalAuthors}
+            totalCount={data.totalPages}
           />
         </div>
       </section>

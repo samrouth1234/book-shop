@@ -6,17 +6,17 @@ import { BookService } from "@/features/books";
 
 interface ViewBookDetailProps {
   params: Promise<{
-    bookId: string;
+    id: string;
   }>;
 }
 
 const bookService = new BookService(db);
 
 export default async function ViewBookDetails({ params }: ViewBookDetailProps) {
-  const { bookId: bookIdParam } = await params;
-  const bookId = Number(bookIdParam);
+  const { id: bookIdParam } = await params;
+  const id = Number(bookIdParam);
 
-  if (!bookId) {
+  if (!id) {
     return (
       <section className="p-6">
         <h1 className="text-2xl font-semibold text-red-500">Invalid Book ID</h1>
@@ -24,7 +24,7 @@ export default async function ViewBookDetails({ params }: ViewBookDetailProps) {
     );
   }
 
-  const book = await bookService.getById(bookId);
+  const book = await bookService.getById(id);
 
   if (!book) {
     return (

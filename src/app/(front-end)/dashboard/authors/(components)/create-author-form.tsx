@@ -16,27 +16,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AuthorSchemaValidation } from "@/db/types/author.type";
+import { createAuthor } from "@/lib/helper/authors/api";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-const createAuthor = async (values: AuthorSchemaValidation) => {
-  const response = await fetch(`/api/authors`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(values),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to create author");
-  }
-
-  return response.json();
-};
 
 export default function CreateAuthorForm() {
   const router = useRouter();

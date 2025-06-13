@@ -38,5 +38,3 @@ export const newBookSchema = z.object({
   authorName: z.string(),
   createdAt: z.date().optional(),
 });
-
-export type newBook = z.infer<typeof newBookSchema>;

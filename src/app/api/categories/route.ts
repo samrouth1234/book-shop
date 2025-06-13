@@ -3,12 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newCategorySchema } from "@/db/shema";
-import { apiHandler } from "@/error";
 import { CategoryService } from "@/features/categories";
+import { paginatedResponse } from "@/lib/api-response";
 
 const categorySerive = new CategoryService(db);
 
-export const GET = apiHandler(async (req: Request) => {
+export const GET = async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
@@ -18,13 +18,12 @@ export const GET = apiHandler(async (req: Request) => {
     limit,
   );
 
-  return NextResponse.json({
-    categories: categorys,
-    totalCategories: totalCategorys,
-  });
-});
+  return NextResponse.json(
+    paginatedResponse(categorys, totalCategorys, page, limit),
+  );
+};
 
-export const POST = apiHandler(async (req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
   try {
     const json = await req.json();
     const result = newCategorySchema.safeParse(json);
@@ -59,4 +58,4 @@ export const POST = apiHandler(async (req: NextRequest) => {
       { status: HttpStatus.INTERNAL_SERVER_ERROR },
     );
   }
-});
+};
