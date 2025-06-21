@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 
 import loading from "@/../../public/loading-animation.svg";
-import { PaginationWithLinks } from "@/app/(front-end)/(components)/pagination-link";
+import { PaginationWithLinks } from "@/app/(client)/(components)/pagination-link";
 import {
   Table,
   TableBody,

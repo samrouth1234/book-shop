@@ -1,5 +1,5 @@
 import { BookSchemaValidation } from "@/db/types/book.type";
-import { BookType } from "@/types";
+import { ApiResponse, BookType } from "@/types";
 
 interface BookResponse {
   items: BookType[];
@@ -33,8 +33,16 @@ export async function fetchBooks(
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
+
   if (!response.ok) throw new Error("Failed to fetch books");
-  const json = await response.json();
+
+  const json: ApiResponse<BookResponse> = await response.json();
+  console.log("all books", json);
+
+  if (!json.success || !json.data) {
+    throw new Error(json.error?.message || "Unexpected response format");
+  }
+
   return json.data;
 }
 

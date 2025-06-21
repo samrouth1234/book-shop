@@ -4,7 +4,7 @@ import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newCategorySchema } from "@/db/shema";
 import { CategoryService } from "@/features/categories";
-import { Success } from "@/lib/api-response";
+import { createSuccessResponse } from "@/lib/api-response";
 
 const categorySerive = new CategoryService(db);
 
@@ -25,7 +25,7 @@ export const GET = async (_: NextRequest, { params }: CategoryIdProps) => {
       { message: `Category with ID ${id} not found.` },
       { status: HttpStatus.NOT_FOUND },
     );
-  return NextResponse.json(Success(category));
+  return NextResponse.json(createSuccessResponse(category));
 };
 
 export const PUT = async (req: NextRequest, { params }: CategoryIdProps) => {
@@ -46,7 +46,7 @@ export const PUT = async (req: NextRequest, { params }: CategoryIdProps) => {
   }
 
   const updated = await categorySerive.update(id, updateCategoryData.data);
-  return NextResponse.json(Success(updated));
+  return NextResponse.json(createSuccessResponse(updated));
 };
 
 export const DELETE = async (_: NextRequest, { params }: CategoryIdProps) => {

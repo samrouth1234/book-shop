@@ -4,7 +4,7 @@ import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newBookSchema } from "@/db/shema";
 import { BookService } from "@/features/books";
-import { Success } from "@/lib/api-response";
+import { createSuccessResponse } from "@/lib/api-response";
 
 const bookService = new BookService(db);
 
@@ -25,7 +25,9 @@ export const GET = async (_: NextRequest, { params }: BookIdProps) => {
       { message: `Book with ID ${id} not found.` },
       { status: HttpStatus.NOT_FOUND },
     );
-  return NextResponse.json(Success(book));
+  return NextResponse.json(
+    createSuccessResponse({ data: book, status: HttpStatus.CREATED }),
+  );
 };
 
 export const PUT = async (req: NextRequest, { params }: BookIdProps) => {
@@ -46,7 +48,9 @@ export const PUT = async (req: NextRequest, { params }: BookIdProps) => {
   }
 
   const updated = await bookService.update(id, updateBookData.data);
-  return NextResponse.json(Success(updated));
+  return NextResponse.json(
+    createSuccessResponse({ data: updated, status: HttpStatus.NO_CONTENT }),
+  );
 };
 
 export const DELETE = async (_: NextRequest, { params }: BookIdProps) => {

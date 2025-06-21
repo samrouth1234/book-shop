@@ -45,6 +45,7 @@ export default function ListAllBooks() {
     queryKey: ["books", page, limit],
     queryFn: () => fetchBooks(page, limit),
   });
+  console.log("data",data);
 
   if (isLoading) {
     return (

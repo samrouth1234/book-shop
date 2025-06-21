@@ -4,7 +4,7 @@ import { HttpStatus } from "@/constants/http-status";
 import { db } from "@/db";
 import { newAuthorSchema } from "@/db/shema";
 import { AuthorService } from "@/features/authors";
-import { Success } from "@/lib/api-response";
+import { createSuccessResponse } from "@/lib/api-response";
 
 interface AuthorProps {
   params: Promise<{
@@ -26,7 +26,7 @@ export const GET = async (_: NextRequest, { params }: AuthorProps) => {
       { status: HttpStatus.NOT_FOUND },
     );
 
-  return NextResponse.json(Success(author));
+  return NextResponse.json(createSuccessResponse(author));
 };
 
 export const PUT = async (req: NextRequest, { params }: AuthorProps) => {
@@ -47,7 +47,7 @@ export const PUT = async (req: NextRequest, { params }: AuthorProps) => {
   }
 
   const updated = await authorService.update(id, updateAuthorData.data);
-  return NextResponse.json(Success(updated));
+  return NextResponse.json(createSuccessResponse(updated));
 };
 
 export const DELETE = async (_: NextRequest, { params }: AuthorProps) => {

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Navbar } from "@/app/(front-end)/(components)/main-navbar";
+import { Navbar } from "@/app/(client)/(components)/main-navbar";
 import { Toaster } from "@/components/ui/sonner";
 
 interface BookShopLayoutProps {
