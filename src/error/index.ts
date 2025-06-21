@@ -1,4 +1,11 @@
 import { type NextRequest } from "next/server";
+/**
+ * Handles API errors and converts them to HTTP responses
+ * @param error The error to handle
+ * @param options Response configuration options
+ */
+
+import { NextResponse } from "next/server";
 
 import { HttpStatus } from "@/constants/http-status";
 
@@ -130,14 +137,6 @@ export const ConflictException = createErrorClass(
   HttpStatus.CONFLICT,
 );
 
-/**
- * Handles API errors and converts them to HTTP responses
- * @param error The error to handle
- * @param options Response configuration options
- */
-
-import { NextResponse } from "next/server";
-
 export function HandleApiError(error: unknown): Response {
   console.error(
     "API Error:",
@@ -153,13 +152,13 @@ export function HandleApiError(error: unknown): Response {
   if (error instanceof ApiError) {
     return NextResponse.json(
       { message: error.message, ...(error.meta && { meta: error.meta }) },
-      { status: error.status }
+      { status: error.status },
     );
   }
 
   return NextResponse.json(
     { message: "An unexpected error occurred" },
-    { status: HttpStatus.INTERNAL_SERVER_ERROR }
+    { status: HttpStatus.INTERNAL_SERVER_ERROR },
   );
 }
 
