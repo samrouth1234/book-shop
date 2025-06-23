@@ -1,4 +1,4 @@
-import OverviewCard from "./card-overview";
+import CardRecent from "./card-recent";
 
 const OverviewCardData = [
   {
@@ -26,17 +26,17 @@ const OverviewCardData = [
     id: 3,
     title: "Total Student",
     count: 153,
-    percentage: 42,
+    percentage: -42,
     backgroundColor: "#fbe9e7", // Light red/pink
     textColor: "#b71c1c", // Dark red
   },
 ];
 
-const OverviewSection = () => {
+const CardSection = () => {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
       {OverviewCardData.map((card, index) => (
-        <OverviewCard
+        <CardRecent
           key={index}
           title={card.title}
           count={card.count}
@@ -49,4 +49,4 @@ const OverviewSection = () => {
   );
 };
 
-export default OverviewSection;
+export default CardSection;
