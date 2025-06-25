@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 
-import KBar from "@/components/kbar";
+import ClientCommandProvider from "@/components/context/client-command-provider";
+import { CommandProvider } from "@/components/context/command-context";
 import AppSidebar from "@/components/layout/dashboard/components/app-sidebar";
 import Header from "@/components/layout/dashboard/components/app-sidebar-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -13,12 +14,14 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Persisting the sidebar state in the cookie.
   const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+  const sidebarState = cookieStore.get("sidebar_state")?.value;
+  const defaultOpen = sidebarState === "true";
+
   return (
     <ClerkProvider>
-      <KBar>
+      <CommandProvider>
+        <ClientCommandProvider />
         <SidebarProvider defaultOpen={defaultOpen}>
           <AppSidebar />
           <SidebarInset>
@@ -29,7 +32,7 @@ export default async function DashboardLayout({
             <Toaster richColors position="top-right" />
           </SidebarInset>
         </SidebarProvider>
-      </KBar>
+      </CommandProvider>
     </ClerkProvider>
   );
 }
