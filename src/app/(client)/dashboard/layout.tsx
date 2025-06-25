@@ -7,8 +7,6 @@ import Header from "@/components/layout/dashboard/components/app-sidebar-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
-import { ClerkProvider } from "@clerk/nextjs";
-
 export default async function DashboardLayout({
   children,
 }: {
@@ -19,20 +17,18 @@ export default async function DashboardLayout({
   const defaultOpen = sidebarState === "true";
 
   return (
-    <ClerkProvider>
-      <CommandProvider>
-        <ClientCommandProvider />
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
-          <SidebarInset>
-            <Header />
-            {/* page main content */}
-            {children}
-            {/* page main content ends */}
-            <Toaster richColors position="top-right" />
-          </SidebarInset>
-        </SidebarProvider>
-      </CommandProvider>
-    </ClerkProvider>
+    <CommandProvider>
+      <ClientCommandProvider />
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <AppSidebar />
+        <SidebarInset>
+          <Header />
+          {/* page main content */}
+          {children}
+          {/* page main content ends */}
+          <Toaster richColors position="top-right" />
+        </SidebarInset>
+      </SidebarProvider>
+    </CommandProvider>
   );
 }

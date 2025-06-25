@@ -40,8 +40,6 @@ import { UserAvatarProfile } from "@/components/user-avatar-profile";
 import { navItems } from "@/constants/data";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-import { useUser } from "@clerk/nextjs";
-import { SignOutButton } from "@clerk/nextjs";
 import {
   IconBell,
   IconChevronRight,
@@ -66,18 +64,20 @@ const tenants = [
 
 export default function AppSidebar() {
   const pathname = usePathname();
-  const { isOpen } = useMediaQuery();
-  const { user } = useUser();
-  const router = useRouter();
-  const handleSwitchTenant = (_tenantId: string) => {
-    // Tenant switching functionality would be implemented here
-  };
 
-  const activeTenant = tenants[0];
+  const { isOpen } = useMediaQuery();
+  const router = useRouter();
 
   React.useEffect(() => {
     // Side effects based on sidebar state changes
   }, [isOpen]);
+
+  const handleSwitchTenant = (_tenantId: string) => {};
+
+  const activeTenant = tenants[0];
+
+  const user = null;
+  const userProfile = null;
 
   return (
     <Sidebar collapsible="icon">
@@ -160,7 +160,7 @@ export default function AppSidebar() {
                     <UserAvatarProfile
                       className="h-8 w-8 rounded-lg"
                       showInfo
-                      user={user}
+                      user={userProfile}
                     />
                   )}
                   <IconChevronsDown className="ml-auto size-4" />
@@ -178,7 +178,7 @@ export default function AppSidebar() {
                       <UserAvatarProfile
                         className="h-8 w-8 rounded-lg"
                         showInfo
-                        user={user}
+                        user={userProfile}
                       />
                     )}
                   </div>
@@ -204,7 +204,7 @@ export default function AppSidebar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <IconLogout className="mr-2 h-4 w-4" />
-                  <SignOutButton redirectUrl="/auth/sign-in" />
+                  Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
