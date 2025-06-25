@@ -1,35 +1,32 @@
-import Image from "next/image";
+import React from "react";
 
-import Logo from "@/../../public/images/cat-cute.jpg";
-import { Input } from "@/components/ui/input";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import SearchInput from "@/components/search-input";
+import { ThemeSelector } from "@/components/theme-selector";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
-import { Bell, Grid, Search } from "lucide-react";
+import CtaGithub from "./cta-github";
+import { ModeToggle } from "./theme-toggle/theme-toggle";
+import { UserNav } from "./user-nav";
 
-export default function AppSideBarHeader() {
+export default function Header() {
   return (
-    <header className="flex items-center justify-between border-b px-6 py-4">
-      <div className="w-96">
-        <div className="relative">
-          <Search className="absolute top-2.5 left-2.5 h-4 w-4 text-gray-500" />
-          <Input type="search" placeholder="Search files..." className="pl-9" />
-        </div>
+    <header className="flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+      <div className="flex items-center gap-2 px-4">
+        <SidebarTrigger className="-ml-1" />
+        <Separator orientation="vertical" className="mr-2 h-4" />
+        <Breadcrumbs />
       </div>
-      <div className="flex items-center gap-4">
-        <div>
-          <Grid size={20} />
+
+      <div className="flex items-center gap-2 px-4">
+        <CtaGithub />
+        <div className="hidden md:flex">
+          <SearchInput />
         </div>
-        <div>
-          <Bell size={20} />
-        </div>
-        <div className="h-8 w-8 overflow-hidden rounded-full">
-          <Image
-            src={Logo}
-            alt="Avatar"
-            width={32}
-            height={32}
-            className="h-full w-full object-cover"
-          />
-        </div>
+        <UserNav />
+        <ModeToggle />
+        <ThemeSelector />
       </div>
     </header>
   );

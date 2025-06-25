@@ -1,15 +1,13 @@
 import { Suspense } from "react";
 
-import DashboardLayout from "@/components/layout/dashboard/dashboard-layout";
+import DashboardLayout from "@/components/layout/dashboard/page-container";
 
 import AuthorSection from "./(components)/author-section";
 
 export default function AuthPage() {
   return (
-    <DashboardLayout>
-      <Suspense fallback={<div>Loading authors...</div>}>
-        <AuthorSection />
-      </Suspense>
-    </DashboardLayout>
+    <div className="mx-5">
+      <AuthorSection />
+    </div>
   );
 }

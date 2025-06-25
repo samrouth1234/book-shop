@@ -145,6 +145,7 @@ const ListAllCategories = () => {
           <TableRow>
             <TableHead className="w-20 border-r p-4">Categories ID</TableHead>
             <TableHead className="border-r">Name</TableHead>
+            <TableHead className="border-r">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

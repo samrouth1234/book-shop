@@ -1,160 +1,217 @@
 "use client";
 
+import * as React from "react";
+
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
+import { Icons } from "@/components/icons";
+import { OrgSwitcher } from "@/components/org-switcher";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { cn } from "@/lib/utils";
-
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
-  BookMinus,
-  BookOpenText,
-  ChartBarStacked,
-  ChartNoAxesCombined,
-  ChartPie,
-  LayoutDashboard,
-} from "lucide-react";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarRail,
+} from "@/components/ui/sidebar";
+import { UserAvatarProfile } from "@/components/user-avatar-profile";
+import { navItems } from "@/constants/data";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
-interface NavItemProps {
-  href: string;
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}
+import { useUser } from "@clerk/nextjs";
+import { SignOutButton } from "@clerk/nextjs";
+import {
+  IconBell,
+  IconChevronRight,
+  IconChevronsDown,
+  IconCreditCard,
+  IconLogout,
+  IconPhotoUp,
+  IconUserCircle,
+} from "@tabler/icons-react";
 
-function NavItem({ href, icon, children }: NavItemProps) {
+export const company = {
+  name: "Acme Inc",
+  logo: IconPhotoUp,
+  plan: "Enterprise",
+};
+
+const tenants = [
+  { id: "1", name: "Acme Inc" },
+  { id: "2", name: "Beta Corp" },
+  { id: "3", name: "Gamma Ltd" },
+];
+
+export default function AppSidebar() {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  const { isOpen } = useMediaQuery();
+  const { user } = useUser();
+  const router = useRouter();
+  const handleSwitchTenant = (_tenantId: string) => {
+    // Tenant switching functionality would be implemented here
+  };
+
+  const activeTenant = tenants[0];
+
+  React.useEffect(() => {
+    // Side effects based on sidebar state changes
+  }, [isOpen]);
 
   return (
-    <Link
-      href={href}
-      className={cn(
-        "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 transition-colors duration-200",
-        isActive
-          ? "bg-blue-50 text-blue-700"
-          : "hover:bg-gray-50 hover:text-gray-900",
-      )}
-    >
-      {icon}
-      <span>{children}</span>
-    </Link>
-  );
-}
+    <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <OrgSwitcher
+          tenants={tenants}
+          defaultTenant={activeTenant}
+          onTenantSwitch={handleSwitchTenant}
+        />
+      </SidebarHeader>
+      <SidebarContent className="overflow-x-hidden">
+        <SidebarGroup>
+          <SidebarGroupLabel>Overview</SidebarGroupLabel>
+          <SidebarMenu>
+            {navItems.map((item) => {
+              const Icon = item.icon ? Icons[item.icon] : Icons.logo;
+              return item?.items && item?.items?.length > 0 ? (
+                <Collapsible
+                  key={item.title}
+                  asChild
+                  defaultOpen={item.isActive}
+                  className="group/collapsible"
+                >
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton
+                        tooltip={item.title}
+                        isActive={pathname === item.url}
+                      >
+                        {item.icon && <Icon />}
+                        <span>{item.title}</span>
+                        <IconChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {item.items?.map((subItem) => (
+                          <SidebarMenuSubItem key={subItem.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={pathname === subItem.url}
+                            >
+                              <Link href={subItem.url}>
+                                <span>{subItem.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
+              ) : (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.title}
+                    isActive={pathname === item.url}
+                  >
+                    <Link href={item.url}>
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                >
+                  {user && (
+                    <UserAvatarProfile
+                      className="h-8 w-8 rounded-lg"
+                      showInfo
+                      user={user}
+                    />
+                  )}
+                  <IconChevronsDown className="ml-auto size-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                side="bottom"
+                align="end"
+                sideOffset={4}
+              >
+                <DropdownMenuLabel className="p-0 font-normal">
+                  <div className="px-1 py-1.5">
+                    {user && (
+                      <UserAvatarProfile
+                        className="h-8 w-8 rounded-lg"
+                        showInfo
+                        user={user}
+                      />
+                    )}
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
 
-function SidebarListItem({ href, label }: { href: string; label: string }) {
-  const pathname = usePathname();
-  const isActive = pathname === href;
-
-  return (
-    <Link
-      href={href}
-      className={cn(
-        "mb-1 block rounded-md px-6 py-1.5 text-sm transition-colors",
-        isActive
-          ? "bg-blue-100 font-semibold text-blue-700"
-          : "text-gray-700 hover:bg-gray-100",
-      )}
-    >
-      {label}
-    </Link>
-  );
-}
-
-export default function AppSideBarBook() {
-  return (
-    <div className="w-64 border-r bg-white">
-      <div className="p-4">
-        <h1 className="text-xl font-bold">KHMENG CODER</h1>
-      </div>
-      <nav className="space-y-1 px-2">
-        <NavItem href="/dashboard" icon={<LayoutDashboard size={20} />}>
-          Dashboard
-        </NavItem>
-        <NavItem href="#" icon={<ChartPie size={20} />}>
-          Presentations
-        </NavItem>
-        <NavItem href="#" icon={<ChartNoAxesCombined size={20} />}>
-          Analytics
-        </NavItem>
-        <section className="py-3">
-          <p className="px-3 text-xs font-medium text-gray-500 uppercase">
-            Collections
-          </p>
-          <section className="mt-2">
-            {/* Book */}
-            <Accordion type="single" collapsible>
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="px-3 py-2 text-gray-700 hover:bg-gray-50">
-                  {" "}
-                  <p className="flex justify-start gap-2">
-                    {" "}
-                    <BookMinus size={20} /> Book{" "}
-                  </p>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <SidebarListItem
-                    href="/dashboard/books"
-                    label="List All Books"
-                  />
-                  <SidebarListItem
-                    href="/dashboard/books/create"
-                    label="Create Book"
-                  />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-            {/* Author */}
-            <Accordion type="single" collapsible>
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="px-3 py-2 text-gray-700 hover:bg-gray-50">
-                  {" "}
-                  <p className="flex justify-start gap-2">
-                    {" "}
-                    <BookOpenText size={20} /> Author{" "}
-                  </p>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <SidebarListItem
-                    href="/dashboard/authors"
-                    label="List All Authors"
-                  />
-                  <SidebarListItem
-                    href="/dashboard/authors/create"
-                    label="Create Author"
-                  />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-            {/* Categories */}
-            <Accordion type="single" collapsible>
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="px-3 py-2 text-gray-700 hover:bg-gray-50">
-                  {" "}
-                  <p className="flex justify-start gap-2">
-                    {" "}
-                    <ChartBarStacked size={20} /> Categories{" "}
-                  </p>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <SidebarListItem
-                    href="/dashboard/categories"
-                    label="List All Categories"
-                  />
-                  <SidebarListItem
-                    href="/dashboard/categories/create"
-                    label="Create Categories"
-                  />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </section>
-        </section>
-      </nav>
-    </div>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem
+                    onClick={() => router.push("/dashboard/profile")}
+                  >
+                    <IconUserCircle className="mr-2 h-4 w-4" />
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <IconCreditCard className="mr-2 h-4 w-4" />
+                    Billing
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <IconBell className="mr-2 h-4 w-4" />
+                    Notifications
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <IconLogout className="mr-2 h-4 w-4" />
+                  <SignOutButton redirectUrl="/auth/sign-in" />
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+      <SidebarRail />
+    </Sidebar>
   );
 }

@@ -1,5 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
 
+import ThemeProvider from "@/components/layout/dashboard/components/theme-toggle/theme-provider";
+import Providers from "@/components/layout/dashboard/providers";
+import { cn } from "@/lib/utils";
 import { QueryProvider } from "@/providers/react-query";
 
 import "../globals.css";
@@ -38,12 +42,30 @@ export default async function RootLayout({
 }>) {
   const { locale } = await params;
 
+  const cookieStore = await cookies();
+  const activeThemeValue = cookieStore.get("active_theme")?.value;
+  const isScaled = activeThemeValue?.endsWith("-scaled");
   return (
     <html lang={locale}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={cn(
+          activeThemeValue ? `theme-${activeThemeValue}` : "",
+          isScaled ? "theme-scaled" : "",
+          geistSans,
+          geistMono,
+        )}
       >
-        <QueryProvider>{children},</QueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+          enableColorScheme
+        >
+          <Providers activeThemeValue={activeThemeValue as string}>
+            <QueryProvider>{children}</QueryProvider>
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

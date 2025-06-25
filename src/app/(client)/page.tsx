@@ -1,9 +1,9 @@
-import BookShopLayout from "@/components/layout/book-shop/book-shop-layout";
+import DashboardLayout from "@/components/layout/dashboard/page-container";
 
 export default function page() {
   return (
-    <BookShopLayout>
+    <DashboardLayout>
       <h1>Welcome</h1>
-    </BookShopLayout>
+    </DashboardLayout>
   );
 }
